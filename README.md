@@ -1,11 +1,9 @@
 # StanDCM
 A package to conduct DCM via Stan
 
-<<<<<<< HEAD
 
 # Author
-=======
->>>>>>> 49c425e... init
+
 # How to cite this package
 
 # Features
