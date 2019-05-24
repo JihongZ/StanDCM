@@ -368,24 +368,25 @@ parameters{
   \n
 generated quantities {
 
-  vector[Np] log_lik[Nc, Ni];
-  matrix[Np,Nc] contributionsPC;
-  vector[Ni] contributionsI;
-  //Posterior
-  for (iterp in 1:Np){
-      for (iterc in 1:Nc){
-        for (iteri in 1:Ni){
-          if (Y[iterp,iteri] == 1)
-            contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
-          else
-            contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-          log_lik[iterc,iteri,iterp]=contributionsI[iteri];
-        }
-        contributionsPC[iterp,iterc]=prod(exp(contributionsI));
+ vector[Ni] log_lik[Np];
+ vector[Ni] contributionsI;
+ matrix[Ni,Nc] contributionsIC;
+
+ //Posterior
+ for (iterp in 1:Np){
+   for (iteri in 1:Ni){
+     for (iterc in 1:Nc){
+       if (Y[iterp,iteri] == 1)
+          contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
+       else
+          contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
+          contributionsIC[iteri,iterc]=contributionsI[iteri];
       }
+      log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
+  }
 }
-  '
+'
   if (.Platform$OS.type == "unix") {
     filename = paste(paste(savepath,savename,sep='/'),'.stan',sep='')
   }else{
