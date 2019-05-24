@@ -418,6 +418,8 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
                          unlist(lapply(strsplit(unlist(lapply(strsplit(CDMresult$partype.attr, 'Attr', fixed=FALSE),function(x){paste(x,collapse="")})),'-'),function(x){paste(x,collapse="")})),
                          sep='')
     CDM.parm.est<-CDMresult$est
+    # remove nagetive values in initial values
+    CDM.parm.est[CDM.parm.est < 0]  <-  0.01
     parm.ini<-round(CDM.parm.est[match(trueParmName,CDM.parm.name)],4)
     CDM.prop.est<-mod1$attribute.patt
     prop.ini<-CDM.prop.est[match(Classp.exp1,rownames(CDM.prop.est)),1]
@@ -450,6 +452,7 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
   }else{
     compiled_model<-stan_model(script.path)
   }
+
   if(init.list=='cdm'){
     estimated_model<-tryCatch(sampling(compiled_model,
                                        data = data.list,
@@ -474,6 +477,7 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
   estimated_model
 }
 #options(mc.cores = parallel::detectCores())
-#estimatedMod<-StanLCDM.run(Qmatrix,respMatrix,iter=20,init.list='cdm')
+#estimatedMod<-StanLCDM.run(Qmatrix,respMatrix,iter=20,init.list='cdm',chains = 3)
+#estimatedMod<-StanLCDM.run(Qmatrix,respMatrix,iter=20)
 
 
