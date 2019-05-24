@@ -379,7 +379,7 @@ generated quantities {
             contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
           else
             contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-          log_lik[iterp,iterc,iteri]=contributionsI[iteri];
+          log_lik[iterc,iteri,iterp]=contributionsI[iteri];
         }
         contributionsPC[iterp,iterc]=prod(exp(contributionsI));
       }
