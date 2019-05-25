@@ -14,7 +14,28 @@
 #loading needed packages
 #load("D:\\Dropbox\\Stan\\R\\data.RData")
 
+# dim(respMatrix)
+# misspecifiedQmatrix <- matrix(NA, 9, 3)
+# for (col in 1:3) {
+#   misspecifiedQmatrix[, col] <- rbinom(9, 1, 0.5)
+# }
+# print(rowSums(misspecifiedQmatrix))
+# misspecifiedQmatrix[1,3] = 0
+#
+estimatedMod<-StanLCDM.run(Qmatrix,respMatrix,iter=4000,init.list='cdm',chains = 3)
+estimatedMod_misspecified<-StanLCDM.run(misspecifiedQmatrix,respMatrix, iter=4000,init.list='cdm',chains = 3)
 
-StanLCDM.loofit <- function(x, pars ="log_lik", cores, save_psis) {
+loo1 <- loo(estimatedMod, pars = "log_lik", save_psis = TRUE)
+loo2 <- loo(estimatedMod_misspecified, pars = "log_lik", save_psis = TRUE)
+print(loo1)
+print(loo2)
 
+save(Qmatrix, misspecifiedQmatrix, respMatrix, file = "R/data.RData")
+save(estimatedMod, estimatedMod_misspecified, file = "R/modelfit.RData")
+
+loo::compare(loo1, loo2)
+
+StanLCDM.loofit <- function(x, pars ="log_lik", cores = 2, save_psis =TRUE) {
+  loo1 <- loo(estimatedMod, pars = pars, save_psis = save_psis, cores = cores)
+  print(loo1)
 }
