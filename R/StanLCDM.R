@@ -379,8 +379,8 @@ generated quantities {
        if (Y[iterp,iteri] == 1)
           contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
        else
-          contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-          contributionsIC[iteri,iterc]=contributionsI[iteri];
+           contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
+          contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
