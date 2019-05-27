@@ -407,7 +407,9 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
   if(length(rstan.detect)==1){
     break
   }
+  Cdm.init = F
   if(init.list=='cdm'){
+    Cdm.init = T
     Install.package(c("CDM","stringr"))
     trueParmName<-Parm.name(Qmatrix=Qmatrix)$parm.name
     Classp.exp1<-Parm.name(Qmatrix=Qmatrix)$class.expression
@@ -453,8 +455,7 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
   }else{
     compiled_model<-stan_model(script.path)
   }
-
-  if(init.list=='cdm'){
+  if(Cdm.init == T){
     estimated_model<-tryCatch(sampling(compiled_model,
                                        data = data.list,
                                        iter = iter,
