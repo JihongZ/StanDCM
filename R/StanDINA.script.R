@@ -1,3 +1,18 @@
+#' @title A function to generate leave-one-out cross-validation for Stan Model
+#'
+#' @description
+#' The StanLCDM.loofit Function to automate Stan code geneartion for LCDMs with binary resposnes
+#'
+#' @param Qmatrix the Q-matrix specified for the LCDM
+#' @param savepath save the .stan file to somewhere; the default path is getwd()
+#' @param savename name the .stan
+#' @return a. stan file saved at the specified path
+#'
+#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
+#'
+#' @export
+#loading needed packages
+
 StanDINA.script<-function(Qmatrix,savepath=getwd(),savename="DINA_uninf"){
 
   #Load packages
@@ -96,6 +111,7 @@ StanDINA.script<-function(Qmatrix,savepath=getwd(),savename="DINA_uninf"){
     }
   }
 
+
   #Monotonicity constraint in terms of the interaction terms of the item effects
   Constrain.List1<-NULL
   name.inter<-unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2]
@@ -173,7 +189,7 @@ StanDINA.script<-function(Qmatrix,savepath=getwd(),savename="DINA_uninf"){
     }
   }
   fix.Parmprior<-c(paste('  real',fixparm.vec,';\n '),
-                   paste(' ',fixparm.vec,"<-0",';\n ')
+                   paste(' ',fixparm.vec,"=0",';\n ')
   )
   ##therefore we can use: fix.Parmprior,update.Parmprior
   #############################################################
@@ -197,6 +213,7 @@ StanDINA.script<-function(Qmatrix,savepath=getwd(),savename="DINA_uninf"){
   }
   '
 
+
   #Data Specification
   data.spec<-'
 data{
@@ -216,10 +233,11 @@ parameters{
 transparm.spec<-paste(c('
   transformed parameters{
   matrix[Ni, Nc] PImat;\n',
+                        fix.Parmprior,
                         paste0(unlist(Reparm)),'}\n'),collapse='')
 
-#Model Specification
-model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,fix.Parmprior,update.Parmprior,Likelihood),sep=''),'\n}',sep=''))
+#Model Specification update052619
+model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,update.Parmprior,Likelihood),sep=''),'\n}',sep=''))
 
 #Generated Quantities Specification
 generatedQuantities.spec<-'
@@ -246,18 +264,17 @@ generated quantities {
 }
   '
 
-sink(file=paste(paste(savepath,savename,sep='/'),'.stan',sep=''),append=FALSE)
+if (.Platform$OS.type == "unix") {
+  filename = paste(paste(savepath,savename,sep='/'),'.stan',sep='')
+}else{
+  filename = paste(paste(savepath,savename,sep='\\'),'.stan',sep='')
+}
+
+sink(file=filename,append=FALSE)
 cat(
   paste(c('   ',
           data.spec,parm.spec,transparm.spec,model.spec,generatedQuantities.spec)
   ))
-sink(NULL)``
+sink(NULL)
 
 }
-
-
-# new qmatrix
-# Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
-# StanLCDM.script(Qmatrix)
-# StanDINA.script(Qmatrix)
-

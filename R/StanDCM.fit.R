@@ -8,34 +8,33 @@
 #' @param savename name the .stan
 #' @return a. stan file saved at the specified path
 #'
-#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}
+#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
 #loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\data.RData")
 
-# dim(respMatrix)
-# misspecifiedQmatrix <- matrix(NA, 9, 3)
-# for (col in 1:3) {
-#   misspecifiedQmatrix[, col] <- rbinom(9, 1, 0.5)
-# }
-# print(rowSums(misspecifiedQmatrix))
-# misspecifiedQmatrix[1,3] = 0
+# load("data.RData")
+# Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
+# # dim(respMatrix)
+# misspecifiedQmatrix <- Qmatrix
+# misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
 #
-estimatedMod<-StanLCDM.run(Qmatrix,respMatrix,iter=4000,init.list='cdm',chains = 3)
-estimatedMod_misspecified<-StanLCDM.run(misspecifiedQmatrix,respMatrix, iter=4000,init.list='cdm',chains = 3)
+# # misspecifiedQmatrix[1,3] = 0
+# #
 
-loo1 <- loo(estimatedMod, pars = "log_lik", save_psis = TRUE)
-loo2 <- loo(estimatedMod_misspecified, pars = "log_lik", save_psis = TRUE)
-print(loo1)
-print(loo2)
-
-save(Qmatrix, misspecifiedQmatrix, respMatrix, file = "R/data.RData")
-save(estimatedMod, estimatedMod_misspecified, file = "R/modelfit.RData")
-
-loo::compare(loo1, loo2)
+# estimatedMod_misspecified<-StanLCDM.run(misspecifiedQmatrix,respMatrix, iter=100,init.list='cdm',chains = 3)
+#
+# loo1 <- loo(estimatedMod, pars = "log_lik", save_psis = TRUE)
+# loo2 <- loo(estimatedMod_misspecified, pars = "log_lik", save_psis = TRUE)
+# print(loo1)
+# print(loo2)
+#
+# save(Qmatrix, misspecifiedQmatrix, respMatrix, file = "R/data.RData")
+# save(estimatedMod, estimatedMod_misspecified, file = "R/modelfit.RData")
+#
+# loo::compare(loo1, loo2)
 
 StanLCDM.loofit <- function(x, pars ="log_lik", cores = 2, save_psis =TRUE) {
   loo1 <- loo(estimatedMod, pars = pars, save_psis = save_psis, cores = cores)
-  print(loo1)
+  loo1
 }
