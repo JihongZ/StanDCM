@@ -1,17 +1,41 @@
-#' @title A function to generate leave-one-out cross-validation for Stan Model
+#' @title DCM calibration under the DINA model via Stan
+#'
 #'
 #' @description
-#' The StanLCDM.loofit Function to automate Stan code geneartion for LCDMs with binary resposnes
+#' \code{StanDINA} uses Stan program to calibrate the deterministic inputs, noisy and gate model for dichotomous responses, and its
+#' extension
 #'
-#' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param savepath save the .stan file to somewhere; the default path is getwd()
+#' In addition, users are allowed to specify design matrix and link function for each item, and distinct models may be used
+#' in a single test for different items. The attributions can be either dichomous or polytomous.
+
+#' @usage
+#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
+#' chains=3,init.list='random',control.list=NA)
+#'
+#' @param Qmatrix A required matrix
+#' @param response.matrix save the .stan file to somewhere; the default path is getwd()
+#' @param script.path save the .stan file to somewhere; the default path is getwd()
 #' @param savename name the .stan
-#' @return a. stan file saved at the specified path
+#' @param iter name the .stan
+#' @param chains name the .stan
+#' @param init.list name the .stan
+#' @param control.list name the .stan
 #'
-#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
+#' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
+#' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
+#' extracting strctural parameters.
+#'
+#'
+#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
 #'
 #' @export
-#loading needed packages
+#' @examples
+#' \dontrun{
+#' #----------- DINA model-----------#
+#' mod1<-StanDINA.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chains = 3)
+#' summary(mod1)
+#' }
+
 
 StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
                        chains=3,init.list='random',control.list=NA){
