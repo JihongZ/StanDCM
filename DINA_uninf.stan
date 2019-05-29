@@ -14,15 +14,9 @@ parameters{
    real<lower=0> l4_12 ;
    real<lower=0> l5_13 ;
    real<lower=0> l6_13 ;
-   real<lower=0> l7_11 ;
-   real<lower=0> l7_12 ;
-   real<lower=0> l8_12 ;
-   real<lower=0> l8_13 ;
-   real<lower=0> l9_11 ;
-   real<lower=0> l9_13 ;
-   real l7_212 ;
-   real l8_223 ;
-   real l9_213 ;
+   real<lower=0> l7_212 ;
+   real<lower=0> l8_223 ;
+   real<lower=0> l9_213 ;
    real l1_0 ;
    real l2_0 ;
    real l3_0 ;
@@ -34,8 +28,40 @@ parameters{
    real l9_0 ;
  }
  
-  transformed parameters{
-  matrix[Ni, Nc] PImat;
+ transformed parameters{
+ matrix[Ni, Nc] PImat;
+ vector[Ni] gParm;
+ vector[Ni] sParm;
+  real l7_11 ;
+   real l7_12 ;
+   real l8_12 ;
+   real l8_13 ;
+   real l9_11 ;
+   real l9_13 ;
+   l7_11 =0 ;
+   l7_12 =0 ;
+   l8_12 =0 ;
+   l8_13 =0 ;
+   l9_11 =0 ;
+   l9_13 =0 ;
+   gParm[1]=inv_logit(l1_0);
+  gParm[2]=inv_logit(l2_0);
+  gParm[3]=inv_logit(l3_0);
+  gParm[4]=inv_logit(l4_0);
+  gParm[5]=inv_logit(l5_0);
+  gParm[6]=inv_logit(l6_0);
+  gParm[7]=inv_logit(l7_0);
+  gParm[8]=inv_logit(l8_0);
+  gParm[9]=inv_logit(l9_0);
+  sParm[1]=1-inv_logit(l1_0+l1_11);
+  sParm[2]=1-inv_logit(l2_0+l2_11);
+  sParm[3]=1-inv_logit(l3_0+l3_12);
+  sParm[4]=1-inv_logit(l4_0+l4_12);
+  sParm[5]=1-inv_logit(l5_0+l5_13);
+  sParm[6]=1-inv_logit(l6_0+l6_13);
+  sParm[7]=1-inv_logit(l7_0+l7_11+l7_12+l7_212);
+  sParm[8]=1-inv_logit(l8_0+l8_12+l8_13+l8_223);
+  sParm[9]=1-inv_logit(l9_0+l9_11+l9_13+l9_213);
   PImat[1,1]=inv_logit(l1_0);
   PImat[2,1]=inv_logit(l2_0);
   PImat[3,1]=inv_logit(l3_0);
@@ -121,13 +147,7 @@ model {
     l4_12~normal(0,15);
     l5_13~normal(0,15);
     l6_13~normal(0,15);
-    l7_11~normal(0,15);
-    l7_12~normal(0,15);
-    l8_12~normal(0,15);
-    l8_13~normal(0,15);
-    l9_11~normal(0,15);
-    l9_13~normal(0,15);
-    l7_212~normal(0,15);
+          l7_212~normal(0,15);
     l8_223~normal(0,15);
     l9_213~normal(0,15);
     l1_0~normal(0,15);
@@ -160,22 +180,21 @@ model {
   
 
 generated quantities {
-
- vector[Ni] log_lik[Np];
- vector[Ni] contributionsI;
- matrix[Ni,Nc] contributionsIC;
-
- //Posterior
- for (iterp in 1:Np){
-   for (iteri in 1:Ni){
-     for (iterc in 1:Nc){
-       if (Y[iterp,iteri] == 1)
+  vector[Ni] log_lik[Np];
+  vector[Ni] contributionsI;
+  matrix[Ni,Nc] contributionsIC;
+  //Posterior
+  for (iterp in 1:Np){
+    for (iteri in 1:Ni){
+      for (iterc in 1:Nc){
+        if (Y[iterp,iteri] == 1)
           contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
-       else
-           contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-          contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+        else
+          contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
+        contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
   }
 }
+  
