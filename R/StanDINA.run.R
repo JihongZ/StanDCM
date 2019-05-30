@@ -9,17 +9,17 @@
 #' in a single test for different items. The attributions can be either dichomous or polytomous.
 
 #' @usage
-#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
-#' chains=3,init.list='random',control.list=NA)
+#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="DINA_uninf",iter=1000,warmup = floor(iter/2),
+#' chain.num=3,init.list='random',control.list=NA)
 #'
 #' @param Qmatrix A required matrix
 #' @param response.matrix save the .stan file to somewhere; the default path is getwd()
 #' @param script.path save the .stan file to somewhere; the default path is getwd()
-#' @param savename name the .stan
-#' @param iter name the .stan
-#' @param chains name the .stan
-#' @param init.list name the .stan
-#' @param control.list name the .stan
+#' @param save.name the name of saved stan file
+#' @param iter number of iteration of MCMC estimation. defalts to 1000.
+#' @param chain.num number of MCMC chain.num.
+#' @param init.list the initial values. 'random' or 'CDM'
+#' @param control.list the controlled parameters
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
 #' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
@@ -32,13 +32,15 @@
 #' @examples
 #' \dontrun{
 #' #----------- DINA model-----------#
-#' mod1<-StanDINA.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chains = 3)
+#' mod1<-StanDINA.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chain.num = 3)
 #' summary(mod1)
 #' }
 
 
-StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
-                       chains=3,init.list='random',control.list=NA){
+StanDINA.run<-function(Qmatrix,response.matrix,
+                       script.path=NA,save.path=getwd(),save.name="DINA_uninf",
+                       iter=1000,warmup = 0,
+                       chain.num=3,init.list='random',control.list=NA){
   rstan.detect<-tryCatch(library("rstan"),error=function(e){"rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
     break
@@ -65,11 +67,11 @@ StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
     ))),collapse=',')  ,')',collapse='')
 
     inilist1<-eval(parse(n =2000000 ,text=inilist1))
-    for( i in 2:chains){
+    for( i in 2:chain.num){
       temp.text<-paste('inilist',i,"<-inilist1",sep='')
       eval(parse(text=(temp.text)))
     }
-    temp.text<-paste('init.list<-list(',paste(paste('inilist',1:chains,sep=''),collapse = ","),')',sep='')
+    temp.text<-paste('init.list<-list(',paste(paste('inilist',1:chain.num,sep=''),collapse = ","),')',sep='')
     eval(parse(text=(temp.text)))
   }
   data.list<-Generate.datalist(Qmatrix,response.matrix)
@@ -77,8 +79,8 @@ StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
   if(is.na(control.list)){control.list<-list(adapt_delta=0.82)}
   if(is.na(script.path)==T){
     options(warn=-1)
-    StanDINA.script(Qmatrix,savepath=savepath,savename=savename)
-    script.path<-paste(paste(savepath,savename,sep='/'),'.stan',sep='')
+    StanDINA.script(Qmatrix,save.path=save.path,save.name=save.name)
+    script.path<-paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
     options(warn=0)
     compiled_model<-stan_model(script.path)
   }else{
@@ -90,7 +92,7 @@ StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
                                        iter = iter,
                                        init = init.list,
                                        warmup = warmup,
-                                       chains=chains,
+                                       chains=chain.num,
                                        control=control.list),
                               error=function(e){"The estimation process is terminated with errors"})
   }else{
@@ -99,7 +101,7 @@ StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),s
                                        iter = iter,
                                        init = init.list,
                                        warmup = warmup,
-                                       chains=chains,
+                                       chains=chain.num,
                                        control=control.list),
                               error=function(e){"The estimation process is terminated with errors"})
 

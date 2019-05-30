@@ -5,16 +5,16 @@
 \title{Generate Stan code and Run the estimation for LCDM}
 \usage{
 StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
-  savepath = getwd(), savename = "LCDM_uninf", iter = 1000,
-  warmup = floor(iter/2), chains = 3, init.list = "random",
+  save.path = getwd(), save.name = "LCDM_uninf", iter = 1000,
+  warmup = 0, chain.num = 3, init.list = "random",
   control.list = NA)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
+\item{save.path}{save the .stan file to somewhere; the default path is getwd()}
 
-\item{savename}{name the .stan}
+\item{save.name}{name the .stan}
 }
 \value{
 a. stan file saved at the specified path

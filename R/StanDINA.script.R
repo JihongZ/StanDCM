@@ -4,8 +4,8 @@
 #' The StanLCDM.loofit Function to automate Stan code geneartion for LCDMs with binary resposnes
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param savepath save the .stan file to somewhere; the default path is getwd()
-#' @param savename name the .stan
+#' @param save.path save the .stan file to somewhere; the default path is getwd()
+#' @param save.name name the .stan
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
@@ -13,8 +13,7 @@
 #' @export
 #loading needed packages
 
-StanDINA.script<-function(Qmatrix,savepath=getwd(),savename="DINA_uninf"){
-
+StanDINA.script<-function(Qmatrix,save.path=getwd(),save.name="DINA_uninf"){
   #Load packages
   Install.package("plyr")
   Install.package('stringr')
@@ -275,9 +274,9 @@ generated quantities {
   '
 
 if (.Platform$OS.type == "unix") {
-  filename = paste(paste(savepath,savename,sep='/'),'.stan',sep='')
+  filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
 }else{
-  filename = paste(paste(savepath,savename,sep='\\'),'.stan',sep='')
+  filename = paste(paste(save.path,save.name,sep='\\'),'.stan',sep='')
 }
 
 sink(file=filename,append=FALSE)

@@ -4,14 +4,14 @@
 \alias{StanDINO.script}
 \title{Generate Stan code and Run the estimation for DINO model}
 \usage{
-StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),
-savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
-chains=3,init.list='random',control.list=NA)
+StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
+save.name="DINA_uninf",iter=1000,warmup = floor(iter/2),
+chain.num=3,init.list='random',control.list=NA)
 }
 \arguments{
 \item{Qmatrix}{A required matrix}
 
-\item{savename}{name the .stan}
+\item{save.name}{name the .stan}
 
 \item{response.matrix}{save the .stan file to somewhere; the default path is getwd()}
 
@@ -19,7 +19,7 @@ chains=3,init.list='random',control.list=NA)
 
 \item{iter}{name the .stan}
 
-\item{chains}{name the .stan}
+\item{chain.num}{name the .stan}
 
 \item{init.list}{name the .stan}
 
@@ -36,7 +36,7 @@ The \code{StanDINO.run} Function allows to automate Stan code geneartion for DIN
 \examples{
 \dontrun{
 #----------- DINO model-----------#
-mod1<-StanDINO.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chains = 3)
+mod1<-StanDINO.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chain.num = 3)
 summary(mod1)
 }
 }

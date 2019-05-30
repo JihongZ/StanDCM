@@ -5,16 +5,16 @@
 #' The \code{StanDINO.run} Function allows to automate Stan code geneartion for DINO model with binary resposnes
 #'
 #' @usage
-#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,savepath=getwd(),
-#' savename="DINA_uninf",iter=1000,warmup = floor(iter/2),
-#' chains=3,init.list='random',control.list=NA)
+#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
+#' save.name="DINA_uninf",iter=1000,warmup = floor(iter/2),
+#' chain.num=3,init.list='random',control.list=NA)
 #'
 #' @param Qmatrix A required matrix
 #' @param response.matrix save the .stan file to somewhere; the default path is getwd()
 #' @param script.path save the .stan file to somewhere; the default path is getwd()
-#' @param savename name the .stan
+#' @param save.name name the .stan
 #' @param iter name the .stan
-#' @param chains name the .stan
+#' @param chain.num name the .stan
 #' @param init.list name the .stan
 #' @param control.list name the .stan
 #'
@@ -29,12 +29,12 @@
 #' @examples
 #' \dontrun{
 #' #----------- DINO model-----------#
-#' mod1<-StanDINO.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chains = 3)
+#' mod1<-StanDINO.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chain.num = 3)
 #' summary(mod1)
 #' }
 
 
-StanDINO.script<-function(Qmatrix,savepath=getwd(),savename="DINO_uninf"){
+StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
 
   #Load packages
   Install.package("plyr")
@@ -304,9 +304,9 @@ StanDINO.script<-function(Qmatrix,savepath=getwd(),savename="DINO_uninf"){
   '
 
   if (.Platform$OS.type == "unix") {
-    filename = paste(paste(savepath,savename,sep='/'),'.stan',sep='')
+    filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
   }else{
-    filename = paste(paste(savepath,savename,sep='\\'),'.stan',sep='')
+    filename = paste(paste(save.path,save.name,sep='\\'),'.stan',sep='')
   }
 
   sink(file=filename, append=FALSE)

@@ -20,10 +20,16 @@ context("test LCDM and DINA")
 # })
 
 
-test_that("run DINA model",{
+# test_that("run DINA model",{
+#   Qmatrix2 <- cbind(Qmatrix,rep(1,9))
+#   Qmatrix2[1,1]<-0
+#   mod2 <- StanDINA.run(Qmatrix2,respMatrix, iter=100,init.list='cdm')
+# })
+
+test_that("run DINO model",{
   Qmatrix2 <- cbind(Qmatrix,rep(1,9))
   Qmatrix2[1,1]<-0
-  StanDINA.run(Qmatrix2,respMatrix,iter=20,init.list='cdm')
+  StanDINO.run(Qmatrix2,respMatrix, iter=100,init.list='cdm')
 })
 
 
