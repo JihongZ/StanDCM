@@ -15,8 +15,16 @@
 
 
 Generate.datalist<-function(Qmatrix,response.matrix){
-  list(Y=response.matrix, Na=ncol(Qmatrix),
-       Np = nrow(response.matrix),
-       Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)))
+  if(sum(is.na(response.matrix))!=0){'Stop!The response dataset contains missing value(s)'}else{
+    if( length((unique(unlist(unique(c(response.matrix))))))>2 ){
+      list(Y=response.matrix, Na=ncol(Qmatrix),
+           Np = nrow(response.matrix),
+           Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)),
+           Ns = length((unique(unlist(unique(c(response.matrix)))))))
+    }else{
+      list(Y=response.matrix, Na=ncol(Qmatrix),
+           Np = nrow(response.matrix),
+           Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)))
+    }
+  }
 }
-

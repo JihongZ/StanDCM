@@ -3,6 +3,7 @@
 export(Generate.datalist)
 export(Install.package)
 export(Parm.name)
+export(StanDCM.ppmc)
 export(StanDINA.run)
 export(StanDINA.script)
 export(StanDINO.run)
