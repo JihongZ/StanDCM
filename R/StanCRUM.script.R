@@ -1,41 +1,20 @@
-#' @title Generate Stan code and Run the estimation for DINO model
-#'
+#' @title Generate Stan code and Run the estimation for ORDM
 #'
 #' @description
-#' The \code{StanDINO.run} Function allows to automate Stan code geneartion for DINO model with binary resposnes
+#' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
 #'
-#' @usage
-#' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
-#' save.name="DINA_uninf",iter=1000,warmup = floor(iter/2),
-#' chain.num=3,init.list='random',control.list=NA)
-#'
-#' @param Qmatrix A required matrix
-#' @param response.matrix save the .stan file to somewhere; the default path is getwd()
-#' @param script.path save the .stan file to somewhere; the default path is getwd()
+#' @param Qmatrix the Q-matrix specified for the LCDM
+#' @param save.path save the .stan file to somewhere; the default path is getwd()
 #' @param save.name name the .stan
-#' @param iter name the .stan
-#' @param chain.num name the .stan
-#' @param init.list name the .stan
-#' @param control.list name the .stan
+#' @return a. stan file saved at the specified path
 #'
-#' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-#' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-#' extracting strctural parameters.
-#'
-#'
-#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
+#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#' @examples
-#' \dontrun{
-#' #----------- DINO model-----------#
-#' mod1<-StanDINO.run(Qmatrix, respMatrix, iter=20, init.list='cdm', chain.num = 3)
-#' summary(mod1)
-#' }
+#loading needed packages
+#load("D:\\Dropbox\\Stan\\R\\Data")
 
-
-StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
-
+StanCRUM.script<-function(Qmatrix,save.path=getwd(),save.name="CRUM_uninf"){
   #Load packages
   Install.package("plyr")
   Install.package('stringr')
@@ -126,19 +105,12 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
 
   #Produce kernel expressions across items and attributes
   Kernel.exp<-OUTPUT[[1]]
-  Kernel.exp.detect<-OUTPUT[[1]] #052719updates
-  Kernel.exp.dino<-OUTPUT[[1]] #052719updates
   for (i in 1:nrow(OUTPUT[[1]])){
     for ( j in 1:ncol(OUTPUT[[1]])){
-      if(sum(grep('S',OUTPUT[[1]][i,j]))!=0){Kernel.exp[i,j]<-gsub('S','+',OUTPUT[[1]][i,j])
-      Kernel.exp.detect[i,j]<-NA} #052719updates
+      if(sum(grep('S',OUTPUT[[1]][i,j]))!=0){Kernel.exp[i,j]<-gsub('S','+',OUTPUT[[1]][i,j])}
     }
   }
-  for (i in 1:nrow(OUTPUT[[1]])){ #052719updates
-    theClosestEffect<-which(is.na(Kernel.exp.detect[i,]))[1] #052719updates
-    useToReplaceLonger<-Kernel.exp[i,theClosestEffect] #052719updates
-    Kernel.exp.dino[i,is.na(Kernel.exp.detect[i,])]<-useToReplaceLonger #052719updates
-  } #052719updates
+
 
   #Monotonicity constraint in terms of the interaction terms of the item effects
   Constrain.List1<-NULL
@@ -175,62 +147,26 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
                   unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==11],OUTPUT[[5]])
   numMainEffect<-length(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==1])
   Constrain.List<-paste('  real<lower=0>',itemParmName[1:numMainEffect],';\n ')
-  Unconstrain.List<-paste('  real',itemParmName[-(1:numMainEffect)],';\n ')
+  Unconstrain.List<-paste('  real',intercept,';\n ')
   Reparm<-as.data.frame(matrix(0,nr,nclass))
 
-  #############################################################
-  ###########052719update: Only one main effect is needed #####
-  keep.oneMainEffect<-rep(1,nr)   #052719update:
-  zero.list<-constraints.list
-  fixparm.vec<-NULL #052719update: later they will be fixed to zero
-
-  for(i in 1:nr){
-    keep.oneMainEffect[i]<-OUTPUT[[3]][[i]][max(which(OUTPUT[[4]][[i]]==1))]#052719update:
-    if(length(zero.list[[i]])==1){zero.list[[i]]=NA}else{#052719update:
-      zero.list[[i]]<-constraints.list[[i]][-1]#052719update:
-      fixparm.vec<-c(fixparm.vec,zero.list[[i]])#052719update:
-    }
-  } #intercept, hi.interaction,zero.list/fixparm.vec are what we need
-  fixparm.vec<-unlist(constraints.list)[!unlist(constraints.list)%in%keep.oneMainEffect]
-  Constrain.List<-paste('  real<lower=0>',keep.oneMainEffect,';\n ')#052719update:
-  Unconstrain.List<-paste('  real',intercept,';\n ')
-  #############################################################
-  #############################################################
 
   #Produce Stan code for PImat parameter
   for(loopi in 1:nr){
     for( loopc in 1:nclass){
-      Reparm[loopi,loopc]<-paste('  PImat[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp.dino[loopi,loopc]),');\n',sep='')
+      Reparm[loopi,loopc]<-paste('  PImat[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp[loopi,loopc]),');\n',sep='')
     }
   }
 
-  #########052719update:create g and s parameters
-  gParm<-rep(0,nr)
-  sParm<-rep(0,nr)
+  ####################053119update####################
   for(loopi in 1:nr){
-    gParm[loopi]<-paste('  gParm[',loopi,']=inv_logit(',paste(Kernel.exp.dino[loopi,1]),');\n',sep='')
-    sParm[loopi]<-paste('  sParm[',loopi,']=1-inv_logit(',paste(Kernel.exp.dino[loopi,nclass]),');\n',sep='')
-  }
-
-
-  Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
-  #############################################################
-  ###########052719update: Only one main effect is needed #####
-  update.Parmprior<-Parmprior
-  fix.Parmprior<-NULL
-  for(i in 1:length(Parmprior)){
-    if(grepl(paste(fixparm.vec, collapse = "|"), Parmprior[i])){
-      update.Parmprior[i]<-""
+    for(loopc in 1:Nc){
+      Reparm[loopi,loopc]<- str_replace_all(Reparm[loopi,loopc],paste((name.inter),collapse="|"),"0")
     }
   }
-  update.Parmprior<-update.Parmprior[update.Parmprior!='']
-  fix.Parmprior<-c(paste('  real',fixparm.vec,';\n '),
-                   paste(' ',fixparm.vec,"=0",';\n ')
-  )
-  ##therefore we can use: fix.Parmprior,update.Parmprior
-  #############################################################
-  #############################################################
+  Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',c(itemParmName[1:numMainEffect],intercept),'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  ####################053119update END  ##############
 
   #Likelihood Stan code
   Likelihood<-'
@@ -253,66 +189,65 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
 
   #Data Specification
   data.spec<-'
-  data{
+data{
   int Np;
   int Ni;
   int Nc;
   matrix[Np, Ni] Y;
-  }
+}
   '
-  #Parameter Specification
-  parm.spec<-paste(c('
-  parameters{
+
+#Parameter Specification
+parm.spec<-paste(c('
+parameters{
   simplex[Nc] Vc;\n ',paste0(Constrain.List),paste0(Unconstrain.List),
-                     '}\n'),collapse='')
+                   '}\n'),collapse='')
 
-  #Reparameter Specification
-  transparm.spec<-paste(c('
+#Reparameter Specification
+transparm.spec<-paste(c('
   transformed parameters{
-  matrix[Ni, Nc] PImat;
-  vector[Ni] gParm;
-  vector[Ni] sParm;\n',
-                          gParm, #052719update
-                          sParm, #052719update
-                          paste0(unlist(Reparm)),'}\n'),collapse='')
+  matrix[Ni, Nc] PImat;\n',
+                        paste0(unlist(Reparm)),'}\n'),collapse='')
 
-  #Model Specification update052619
-  model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,update.Parmprior,Likelihood),sep=''),'\n}',sep=''))
+#Model Specification
+model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,Parmprior,Likelihood),sep=''),'\n}',sep=''))
 
-  #Generated Quantities Specification
-  generatedQuantities.spec<-'
+#Generated Quantities Specification
+generatedQuantities.spec<-'
   \n
-  generated quantities {
-  vector[Ni] log_lik[Np];
-  vector[Ni] contributionsI;
-  matrix[Ni,Nc] contributionsIC;
-  //Posterior
-  for (iterp in 1:Np){
-    for (iteri in 1:Ni){
-      for (iterc in 1:Nc){
-        if (Y[iterp,iteri] == 1)
+generated quantities {
+
+ vector[Ni] log_lik[Np];
+ vector[Ni] contributionsI;
+ matrix[Ni,Nc] contributionsIC;
+
+ //Posterior
+ for (iterp in 1:Np){
+   for (iteri in 1:Ni){
+     for (iterc in 1:Nc){
+       if (Y[iterp,iteri] == 1)
           contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
-        else
-          contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
+       else
+           contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
           contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
   }
-  }
-  '
+}
+'
+if (.Platform$OS.type == "unix") {
+  filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
+}else{
+  filename = paste(paste(save.path,save.name,sep='\\'),'.stan',sep='')
+}
 
-  if (.Platform$OS.type == "unix") {
-    filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
-  }else{
-    filename = paste(paste(save.path,save.name,sep='\\'),'.stan',sep='')
-  }
-
-  sink(file=filename, append=FALSE)
-  cat(
-    paste(c('   ',
-            data.spec,parm.spec,transparm.spec,model.spec,generatedQuantities.spec)
-    ))
-  sink(NULL)
+sink(file= filename,append=FALSE)
+cat(
+  paste(c('   ',
+          data.spec,parm.spec,transparm.spec,model.spec,generatedQuantities.spec)
+  ))
+sink(NULL)
 
 }
+

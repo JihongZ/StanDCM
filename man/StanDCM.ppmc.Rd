@@ -4,7 +4,8 @@
 \alias{StanDCM.ppmc}
 \title{A function to calculate pecentage of extreme o-values for item-pair odds ratios}
 \usage{
-StanDCM.ppmc(stan.model, response.matrix, n.sim = 6000, n.burnin = 20)
+StanDCM.ppmc(stan.model, response.matrix, n.sim = 6000, n.burnin = 20,
+  plot.option = FALSE)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
