@@ -1,29 +1,32 @@
-#' @title A function to calculate pecentage of extreme o-values for item-pair odds ratios
+#' @title A function to calculate pecentage of extreme p-values for sumscore distribution
 #'
 #' @description
 #' The StanDCM.ppmc Function to automate Stan code geneartion for LCDMs with binary resposnes
 #'
-#' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param savepath save the .stan file to somewhere; the default path is getwd()
-#' @param savename name the .stan
-#' @return a. stan file saved at the specified path
+#' @param stan.model A rStan object
+#' @param response.matrix the response matrix used by RStan Object
+#' @param n.sim number of simulations for Posterior Predictive Model Checking
+#' @param n.burnin number of burn-ins
+#' @param plot.option logical. whether to provide a plot for ppmc
+#' @return p-values tables
 #'
-#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
+#' @author {Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
 #'
 #' @export
-#loading needed packages
+#' @examples
+#' load("data.RData")
+#' Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
+#' dim(respMatrix)
+#' misspecifiedQmatrix <- Qmatrix
+#' misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
+#' misspecifiedQmatrix[1,3] = 0
+#' mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
+#' StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = FALSE)
+#' end - start
 
-# load("data.RData")
-# Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
-# # dim(respMatrix)
-# misspecifiedQmatrix <- Qmatrix
-# misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
-#
-# # misspecifiedQmatrix[1,3] = 0
-# #
 
 StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 20, plot.option=FALSE) {
-  Install.package(c("Rlab", "MCMCpack", "tidyr", "dplyr"))
+  Install.package(c("Rlab", "MCMCpack", "tidyr", "dplyr", "pbapply"))
   if(plot.option == TRUE) Install.package("ggplot2")
 
   mod1 <- stan.model
@@ -48,6 +51,8 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
     n.sim = Np
   }
   time = 0
+  # create progress bar
+  # pb <- txtProgressBar(min = 0, max = n.sim, style = 3)
   pseudo.sumscore.extract <- function() {
     time <<- time + 1
     iter <- sample(1:(n.iter-n.burnin), 1, replace = TRUE)
@@ -56,9 +61,7 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
 
     # draw from dirichlet distribution and generate class for each person
     Vc.draw <- rdirichlet(1, rep(1, Nc))
-    pseudo.class.vector<-apply(rmultinom(Np, 1, Vc.draw),
-                               2,
-                               function(x){which(x==1)})
+    pseudo.class.vector<-apply(rmultinom(Np, 1, Vc.draw), 2, function(x){which(x==1)})
     pseudo.response.matrix <- t(PImat.select[, pseudo.class.vector])
     pseudo.response.matrix <- t(apply(pseudo.response.matrix, 1, function(x) rbinom(Ni, 1, x)))
     pseudo.sumscore.vector <- apply(pseudo.response.matrix, 1, sum)
@@ -66,8 +69,10 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
     pseudo.sumscore.dist.vector$time = time
     pseudo.sumscore.dist.vector
   }
+  # (2) Set up the style for progree bar
+  pboptions(type = "txt", style = 3, char = "=")
   #（1）extract the pseudo sumscore for n.sim times
-  pseudo.sumscore.dist.matrix = replicate(n.sim, pseudo.sumscore.extract(), simplify = FALSE)
+  pseudo.sumscore.dist.matrix = pbreplicate(n.sim, pseudo.sumscore.extract(), simplify = FALSE)
   pseudo.sumscore.dist.matrix.long <- do.call(rbind,pseudo.sumscore.dist.matrix)
   pseudo.sumscore.dist.matrix.wide <- spread(key = pseudo.sumscore.vector, value = Freq , pseudo.sumscore.dist.matrix.long)
   pseudo.sumscore.dist.df <- pseudo.sumscore.dist.matrix.wide[,-1]
@@ -117,9 +122,4 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
 
 
 
-#mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
-# start <- Sys.time()
-#StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = TRUE)
-# end <- Sys.time()
-# end - start
 

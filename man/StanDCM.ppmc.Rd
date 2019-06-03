@@ -2,24 +2,38 @@
 % Please edit documentation in R/StanDCM.ppmc.R
 \name{StanDCM.ppmc}
 \alias{StanDCM.ppmc}
-\title{A function to calculate pecentage of extreme o-values for item-pair odds ratios}
+\title{A function to calculate pecentage of extreme p-values for sumscore distribution}
 \usage{
 StanDCM.ppmc(stan.model, response.matrix, n.sim = 6000, n.burnin = 20,
   plot.option = FALSE)
 }
 \arguments{
-\item{Qmatrix}{the Q-matrix specified for the LCDM}
+\item{stan.model}{A rStan object}
 
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
+\item{response.matrix}{the response matrix used by RStan Object}
 
-\item{savename}{name the .stan}
+\item{n.sim}{number of simulations for Posterior Predictive Model Checking}
+
+\item{n.burnin}{number of burn-ins}
+
+\item{plot.option}{logical. whether to provide a plot for ppmc}
 }
 \value{
-a. stan file saved at the specified path
+p-values tables
 }
 \description{
 The StanDCM.ppmc Function to automate Stan code geneartion for LCDMs with binary resposnes
 }
+\examples{
+load("data.RData")
+Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
+dim(respMatrix)
+misspecifiedQmatrix <- Qmatrix
+misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
+misspecifiedQmatrix[1,3] = 0
+mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
+StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = TRUE)
+}
 \author{
-{Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}
+{Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
 }
