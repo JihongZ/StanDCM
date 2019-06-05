@@ -14,17 +14,19 @@
 #load("D:\\Dropbox\\Stan\\R\\data.RData") ;Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
 
 
-Generate.datalist<-function(Qmatrix,response.matrix){
+Generate.datalist<-function(Qmatrix,response.matrix,GroupID=NA){
   if(sum(is.na(response.matrix))!=0){'Stop!The response dataset contains missing value(s)'}else{
     if( length((unique(unlist(unique(c(response.matrix))))))>2 ){
-      list(Y=response.matrix, Na=ncol(Qmatrix),
-           Np = nrow(response.matrix),
-           Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)),
-           Ns = length((unique(unlist(unique(c(response.matrix)))))))
+      Generate.dataList<-list(Y=response.matrix, Na=ncol(Qmatrix),
+                              Np = nrow(response.matrix),
+                              Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)),
+                              Ns = length((unique(unlist(unique(c(response.matrix)))))))
     }else{
-      list(Y=response.matrix, Na=ncol(Qmatrix),
-           Np = nrow(response.matrix),
-           Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)))
+      Generate.dataList<-list(Y=response.matrix, Na=ncol(Qmatrix),
+                              Np = nrow(response.matrix),
+                              Ni = ncol(response.matrix),Nc=2^(ncol(Qmatrix)))
     }
   }
+  if(!is.na(GroupID)[1]){Generate.dataList$GroupID=GroupID}
+  Generate.dataList
 }
