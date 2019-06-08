@@ -441,7 +441,9 @@ StanDINO_mG.script<-function(Qmatrix,
                       ,PImat.likelihood0,
                       '}\n',
                       Vc.likelihood
-                      ,'/n
+                      ,'
+
+
   }
   target+=log_sum_exp(contributionsC);
  }
@@ -459,7 +461,7 @@ StanDINO_mG.script<-function(Qmatrix,
   int Ni;
   int Nc;
   matrix[Np, Ni] Y;
-  vector GroupID;
+  vector[Np] GroupID;
   }
   '
 
@@ -475,7 +477,7 @@ StanDINO_mG.script<-function(Qmatrix,
                                      '}\n'),collapse='')}else{
                                        parm.spec<-paste(c('
   parameters{\n ',
-                                                          paste(paste('   simplex[Nc] Vc_g',1:group.num,sep=''),"\n"),
+                                                          paste(paste('   simplex[Nc] Vc_g',1:group.num, ";",sep=''),"\n"),
                                                           paste0(Constrain.List),paste0(Unconstrain.List),
                                                           '}\n'),collapse='')
 
@@ -484,7 +486,9 @@ StanDINO_mG.script<-function(Qmatrix,
 
   #Reparameter Specification
   transparm.spec<-paste(c('
-  transformed parameters{/n',
+  transformed parameters{
+
+                          ',
                           paste('  matrix[Ni, Nc] PImat_g',1:group.num,';\n',sep=''),
                           paste('  vector[Ni] gParm_g',1:group.num,';\n',sep=''),
                           paste('  vector[Ni] sParm_g',1:group.num,';\n',sep=''),
@@ -573,4 +577,3 @@ StanDINO_mG.script<-function(Qmatrix,
   sink(NULL)
 
 }
-

@@ -22,7 +22,7 @@ StanDINO_mG.run<-function(Qmatrix,
                           script.path=NA,save.path=getwd(),save.name="DINO_uninf_multiG",
                           iter=1000,warmup = 0,
                           chain.num=3,init.list='random',control.list=NA){
-  group.num<-length(factor(GroupID))
+  group.num<-length(unique(GroupID))
   rstan.detect<-tryCatch(library("rstan"),error=function(e){"rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
     break
@@ -104,4 +104,3 @@ StanDINO_mG.run<-function(Qmatrix,
 
   estimated_model
 }
-

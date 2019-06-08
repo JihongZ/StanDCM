@@ -22,3 +22,5 @@ Imports:
     Rlab,
     MCMCpack,
     tidyr
+Suggests: 
+    testthat
