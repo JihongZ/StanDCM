@@ -81,12 +81,12 @@ test_that("ddd",{
 
 
 test_that("test StanPrior.update",{
-  Example
-  priorUpdate.matrix<-matrix(0,2,2)
-  priorUpdate.matrix[1,1]<-"l1_0~normal(0,15)"
-  priorUpdate.matrix[2,1]<-"l4_0~normal(0,15)"
-  priorUpdate.matrix[1,2]<-"l1_0~normal(2,10)"
-  priorUpdate.matrix[2,2]<-"l4_0~normal(2,10)"
-  StanPrior.update(priorUpdate.matrix,"./CRUM_uninf.stan")
+  # Example
+  # priorUpdate.matrix<-matrix(0,2,2)
+  # priorUpdate.matrix[1,1]<-"l1_0~normal(0,15)"
+  # priorUpdate.matrix[2,1]<-"l4_0~normal(0,15)"
+  # priorUpdate.matrix[1,2]<-"l1_0~normal(2,10)"
+  # priorUpdate.matrix[2,2]<-"l4_0~normal(2,10)"
+  # StanPrior.update(priorUpdate.matrix,"./CRUM_uninf.stan")
 })
 

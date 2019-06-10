@@ -119,21 +119,25 @@ StanCRUM.script<-function(Qmatrix,save.path=getwd(),save.name="CRUM_uninf"){
   subname.inter<-substr((unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2]), (nchar(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2])-unlist(OUTPUT[[4]])[unlist(OUTPUT[[4]])>=2]+1),
                         nchar(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2]))
 
-  for (inter in 1: length(name.inter)){
-    temp.nw<-numway.inter[inter]
-    temp.nm<-name.inter[inter]
-    temp.subnm<-strsplit(subname.inter[inter],split='')[[1]]
-    temp.sel<-paste(unlist(strsplit(temp.nm,split = '_'))[1],"_",(1:(temp.nw-1)),sep='')
-    first.sel<-unlist(OUTPUT[[3]])[grep(paste((temp.sel),collapse="|"),unlist(OUTPUT[[3]]))]
-    second.sel<-sub(".*_.", "", first.sel)
-    for (sel in 1:length(temp.subnm)){
-      SEL<-second.sel[sel]
-      Constrain.List1<-rbind(
-        paste(temp.nm,">-(0", paste("+",first.sel[grep(SEL,second.sel)],
-                                    sep='',collapse=''),")",sep=''),Constrain.List1)
+  if(length(name.inter)!=0){
+    for (inter in 1: length(name.inter)){
+      temp.nw<-numway.inter[inter]
+      temp.nm<-name.inter[inter]
+      temp.subnm<-strsplit(subname.inter[inter],split='')[[1]]
+      temp.sel<-paste(unlist(strsplit(temp.nm,split = '_'))[1],"_",(1:(temp.nw-1)),sep='')
+      first.sel<-unlist(OUTPUT[[3]])[grep(paste((temp.sel),collapse="|"),unlist(OUTPUT[[3]]))]
+      second.sel<-sub(".*_.", "", first.sel)
+      for (sel in 1:length(temp.subnm)){
+        SEL<-second.sel[sel]
+        Constrain.List1<-rbind(
+          paste(temp.nm,">-(0", paste("+",first.sel[grep(SEL,second.sel)],
+                                      sep='',collapse=''),")",sep=''),Constrain.List1)
+      }
     }
+    Constrain.List1<-as.character(Constrain.List1)
+  }else{
+    Constrain.List1<-NULL
   }
-  Constrain.List1<-as.character(Constrain.List1)
 
   itemParmName<-c(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==1],unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==2],
                   unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==3],
@@ -211,6 +215,7 @@ transparm.spec<-paste(c('
 
 #Model Specification
 model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,Parmprior,Likelihood),sep=''),'\n}',sep=''))
+model.spec<-model.spec[!startsWith(str_remove_all(model.spec," "),"~")]
 
 #Generated Quantities Specification
 generatedQuantities.spec<-'
