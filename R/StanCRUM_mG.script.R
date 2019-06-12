@@ -194,7 +194,8 @@ StanCRUM_mG.script<-function(Qmatrix,
   #############################################################
 
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))  #############################################################
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  #############################################################
 
 
   Kernel.exp.CRUM.groupName<-paste("Kernel.exp.CRUM_g",c(1:group.num),sep='')
@@ -286,20 +287,11 @@ StanCRUM_mG.script<-function(Qmatrix,
   #############################################################
   #####060719update:Change from update.Parmprior&fix     ######
   #############################################################
-  update.Parmprior.multiGroup<-NULL
-  for(i in 1:length(update.Parmprior)){
-    for (j in 1:length(freeParmName)){
-      for (z in 1:group.num){
-        if(sum(grepl(freeParmName[j],update.Parmprior[i]))>=1){
-          temp.update.Parmprior<-str_replace_all(update.Parmprior[i],freeParmName[j],paste(freeParmName[j],"_g",z,sep=''))
-          update.Parmprior.multiGroup<-c(update.Parmprior.multiGroup,
-                                         temp.update.Parmprior)
-        }
-      }
-    }
-  }
+  update.Parmprior.multiGroup<-paste(paste('   ',unique(c(intercept.multigroup)),'~normal(0,15)',';\n',sep=''),
+                                     paste('   ',unique(c(mainEff.multigroup)),'~normal(0,15)',';\n',sep=''))
+
   update.Parmprior.multiGroup<-unique(update.Parmprior.multiGroup)
-  update.Parmprior.multiGroup<-c("   //Prior\n",paste('   ',fixedParmName,'~normal(0,15)',';\n',sep=''),update.Parmprior.multiGroup )
+  update.Parmprior.multiGroup<-c("   //Prior\n ",paste('   ',fixedParmName,'~normal(0,15)',';\n',sep=''),update.Parmprior.multiGroup )
   if(class.equal){
     update.Parmprior.multiGroup<-c(update.Parmprior.multiGroup,paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='') )
   }else{
@@ -308,7 +300,6 @@ StanCRUM_mG.script<-function(Qmatrix,
                                      paste('   Vc_g',i,'~dirichlet(rep_vector(2.0, Nc));\n',sep='') )
     }
   }
-
   ##therefore we can use: fix.Parmprior,update.Parmprior
   #############################################################
   #############################################################
