@@ -1,7 +1,7 @@
 Package: StanDCM
 Type: Package
-Title: Fitting Bayesian DCM using RStan
-Version: 0.0.0.9000
+Title: Fitting Bayesian Diagnostic Classfication Model via RStan
+Version: 0.8.1.9000
 Author@R: c(
     person("Zhehan", "Jiang", email = "zjiang17@@ua.edu", role = c("aut", "cre")),
     person("Jihong", "Zhang", email = "jihong-zhang@uiowa.edu", role = c("ctb", "cre"))
