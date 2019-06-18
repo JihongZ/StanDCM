@@ -25,7 +25,7 @@ StanCRUM_mG.run<-function(Qmatrix,
   group.num<-length(unique(GroupID))
   rstan.detect<-tryCatch(library("rstan"),error=function(e){"rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
-    break
+    stop()
   }
   Cdm.init<-F
   if(init.list=='cdm'){

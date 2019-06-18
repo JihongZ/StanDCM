@@ -18,7 +18,8 @@ StanCRUM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
                        chain.num=3,init.list='random',control.list=NA){
   rstan.detect<-tryCatch(library("rstan"),error=function(e){"rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
-    break
+    #break
+    stop()
   }
   Cdm.init<-F
   if(init.list=='cdm'){
