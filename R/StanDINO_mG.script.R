@@ -14,11 +14,11 @@
 #loading needed packages
 #load("D:\\Dropbox\\Stan\\R\\Data")
 
-StanLCDM_mG.script<-function(Qmatrix,
+StanDINO_mG.script<-function(Qmatrix,
                              group.num,
                              fixeditem.vector=NA,
                              class.equal=T,
-                             save.path=getwd(),save.name="LCDM_uninf_multiG"){
+                             save.path=getwd(),save.name="DINO_uninf_multiG"){
 
   #Load packages
   Install.package("plyr")
@@ -111,7 +111,7 @@ StanLCDM_mG.script<-function(Qmatrix,
   #Produce kernel expressions across items and attributes
   Kernel.exp<-OUTPUT[[1]]
   Kernel.exp.detect<-OUTPUT[[1]] #052719updates
-  Kernel.exp.LCDM<-OUTPUT[[1]] #052719updates
+  Kernel.exp.dino<-OUTPUT[[1]] #052719updates
   for (i in 1:nrow(OUTPUT[[1]])){
     for ( j in 1:ncol(OUTPUT[[1]])){
       if(sum(grep('S',OUTPUT[[1]][i,j]))!=0){Kernel.exp[i,j]<-gsub('S','+',OUTPUT[[1]][i,j])
@@ -121,7 +121,7 @@ StanLCDM_mG.script<-function(Qmatrix,
   for (i in 1:nrow(OUTPUT[[1]])){ #052719updates
     theClosestEffect<-which(is.na(Kernel.exp.detect[i,]))[1] #052719updates
     useToReplaceLonger<-Kernel.exp[i,theClosestEffect] #052719updates
-    Kernel.exp.LCDM[i,is.na(Kernel.exp.detect[i,])]<-useToReplaceLonger #052719updates
+    Kernel.exp.dino[i,is.na(Kernel.exp.detect[i,])]<-useToReplaceLonger #052719updates
   } #052719updates
 
   #Monotonicity constraint in terms of the interaction terms of the item effects
@@ -131,26 +131,21 @@ StanLCDM_mG.script<-function(Qmatrix,
   subname.inter<-substr((unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2]), (nchar(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2])-unlist(OUTPUT[[4]])[unlist(OUTPUT[[4]])>=2]+1),
                         nchar(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])>=2]))
 
-
-  if(length(name.inter)!=0){
-    for (inter in 1: length(name.inter)){
-      temp.nw<-numway.inter[inter]
-      temp.nm<-name.inter[inter]
-      temp.subnm<-strsplit(subname.inter[inter],split='')[[1]]
-      temp.sel<-paste(unlist(strsplit(temp.nm,split = '_'))[1],"_",(1:(temp.nw-1)),sep='')
-      first.sel<-unlist(OUTPUT[[3]])[grep(paste((temp.sel),collapse="|"),unlist(OUTPUT[[3]]))]
-      second.sel<-sub(".*_.", "", first.sel)
-      for (sel in 1:length(temp.subnm)){
-        SEL<-second.sel[sel]
-        Constrain.List1<-rbind(
-          paste(temp.nm,">-(0", paste("+",first.sel[grep(SEL,second.sel)],
-                                      sep='',collapse=''),")",sep=''),Constrain.List1)
-      }
+  for (inter in 1: length(name.inter)){
+    temp.nw<-numway.inter[inter]
+    temp.nm<-name.inter[inter]
+    temp.subnm<-strsplit(subname.inter[inter],split='')[[1]]
+    temp.sel<-paste(unlist(strsplit(temp.nm,split = '_'))[1],"_",(1:(temp.nw-1)),sep='')
+    first.sel<-unlist(OUTPUT[[3]])[grep(paste((temp.sel),collapse="|"),unlist(OUTPUT[[3]]))]
+    second.sel<-sub(".*_.", "", first.sel)
+    for (sel in 1:length(temp.subnm)){
+      SEL<-second.sel[sel]
+      Constrain.List1<-rbind(
+        paste(temp.nm,">-(0", paste("+",first.sel[grep(SEL,second.sel)],
+                                    sep='',collapse=''),")",sep=''),Constrain.List1)
     }
-    Constrain.List1<-as.character(Constrain.List1)
-  }else{
-    Constrain.List1<-NULL
   }
+  Constrain.List1<-as.character(Constrain.List1)
 
   itemParmName<-c(unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==1],unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==2],
                   unlist(OUTPUT[[3]])[unlist(OUTPUT[[4]])==3],
@@ -168,55 +163,58 @@ StanLCDM_mG.script<-function(Qmatrix,
   Reparm<-as.data.frame(matrix(0,nr,nclass))
 
   #############################################################
+  ###########052719update: Only one main effect is needed #####
+  keep.oneMainEffect<-rep(1,nr)   #052719update:
+  zero.list<-constraints.list
+  fixparm.vec<-NULL #052719update: later they will be fixed to zero
+
+  for(i in 1:nr){
+    keep.oneMainEffect[i]<-OUTPUT[[3]][[i]][max(which(OUTPUT[[4]][[i]]==1))]#052719update:
+    if(length(zero.list[[i]])==1){zero.list[[i]]=NA}else{#052719update:
+      zero.list[[i]]<-constraints.list[[i]][-1]#052719update:
+      fixparm.vec<-c(fixparm.vec,zero.list[[i]])#052719update:
+    }
+  } #intercept, hi.interaction,zero.list/fixparm.vec are what we need
+  fixparm.vec<-unlist(constraints.list)[!unlist(constraints.list)%in%keep.oneMainEffect]
+  Constrain.List<-paste('  real<lower=0>',keep.oneMainEffect,';\n ')#052719update:
+  Unconstrain.List<-paste('  real',intercept,';\n ')
+
+
+  #############################################################
   #######060319update: Multiple Group##########################
   #############################################################
   if(!is.na(fixeditem.vector)[1]){
     fixedItem.vector<-c(1:nr)[-fixeditem.vector]
   }else{fixedItem.vector<-c(1:nr)}
-
   #############################################################
-  #######060719update: Multiple Group##########################
-  #############################################################
-  Kernel.exp.LCDM<-Kernel.exp
-  for(loopi in 1:nr){
-    for( loopc in 1:nclass){
-      Reparm[loopi,loopc]<-paste('  PImat[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp[loopi,loopc]),');\n',sep='')
-    }
-  }
-
-  #############################################################
-  #######060719update: Multiple Group End######################
+  #######060319update: Multiple Group##########################
   #############################################################
 
-  Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))  #############################################################
-
-
-  Kernel.exp.LCDM.groupName<-paste("Kernel.exp.LCDM_g",c(1:group.num),sep='')
+  Kernel.exp.dino.groupName<-paste("Kernel.exp.dino_g",c(1:group.num),sep='')
   for(i in 1:group.num){
-    tempfill.Kernel.exp.LCDM<-Kernel.exp.LCDM
-    temp.Kernel.exp.LCDM<-Kernel.exp.LCDM[fixedItem.vector,]
-    for(j in 1:nrow(temp.Kernel.exp.LCDM)){
-      for(z in 1:ncol(temp.Kernel.exp.LCDM)){
-        temp.Kernel.exp.LCDM[j,z]<-paste(temp.Kernel.exp.LCDM[j,z],'_g',i,sep='')
+    tempfill.Kernel.exp.dino<-Kernel.exp.dino
+    temp.Kernel.exp.dino<-Kernel.exp.dino[fixedItem.vector,]
+    for(j in 1:nrow(temp.Kernel.exp.dino)){
+      for(z in 1:ncol(temp.Kernel.exp.dino)){
+        temp.Kernel.exp.dino[j,z]<-paste(temp.Kernel.exp.dino[j,z],'_g',i,sep='')
       }
     }
-    for(j in 1:nrow(temp.Kernel.exp.LCDM)){
-      for(z in 1:ncol(temp.Kernel.exp.LCDM)){
-        temp.Kernel.exp.LCDM[j,z]<-str_replace_all(temp.Kernel.exp.LCDM[j,z],"\\+",paste("_g",i,"+",sep=''))
+    for(j in 1:nrow(temp.Kernel.exp.dino)){
+      for(z in 1:ncol(temp.Kernel.exp.dino)){
+        temp.Kernel.exp.dino[j,z]<-str_replace_all(temp.Kernel.exp.dino[j,z],"\\+",paste("_g",i,"+",sep=''))
       }
     }
-    tempfill.Kernel.exp.LCDM[fixedItem.vector,]<-temp.Kernel.exp.LCDM
-    assign(Kernel.exp.LCDM.groupName[i],tempfill.Kernel.exp.LCDM)
+    tempfill.Kernel.exp.dino[fixedItem.vector,]<-temp.Kernel.exp.dino
+    assign(Kernel.exp.dino.groupName[i],tempfill.Kernel.exp.dino)
   }
-  Kernel.exp.LCDM.list<-list()
-  for(i in 1:group.num){Kernel.exp.LCDM.list[[i]]<-eval(parse(text=paste("Kernel.exp.LCDM_g",i,sep='')))}
+  Kernel.exp.dino.list<-list()
+  for(i in 1:group.num){Kernel.exp.dino.list[[i]]<-eval(parse(text=paste("Kernel.exp.dino_g",i,sep='')))}
   #############################################################
-  ##########060719update: Multiple Group End###################
+  ##########060319update: Multiple Group End###################
   #############################################################
 
   #############################################################
-  ##########060719update: Multiple Group#######################
+  ##########060319update: Multiple Group#######################
   #############################################################
 
   PImat.groupName<-paste("PImat_g",c(1:group.num),sep='')
@@ -224,17 +222,66 @@ StanLCDM_mG.script<-function(Qmatrix,
   #Produce Stan code for PImat parameter
   for(loopi in 1:nr){
     for( loopc in 1:nclass){
+      Reparm[loopi,loopc]<-paste('  PImat[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp.dino[loopi,loopc]),');\n',sep='')
+    }
+  }
+  for(loopi in 1:nr){
+    for( loopc in 1:nclass){
       for (loopg in 1:group.num){
-        Reparm.multigroup[loopi,loopc,loopg]<-paste('  PImat_g',loopg,'[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp.LCDM.list[[loopg]][loopi,loopc]),');\n',sep='')
+        Reparm.multigroup[loopi,loopc,loopg]<-paste('  PImat_g',loopg,'[',loopi,',',loopc,']=inv_logit(',paste(Kernel.exp.dino.list[[loopg]][loopi,loopc]),');\n',sep='')
 
       }
     }
   }
+  #############################################################
+  ##########060319update: Multiple Group End###################
+  #############################################################
+  #########052719update:create g and s parameters
+  gParm<-rep(0,nr)
+  sParm<-rep(0,nr)
+  for(loopi in 1:nr){
+    gParm[loopi]<-paste('  gParm[',loopi,']=inv_logit(',paste(Kernel.exp.dino[loopi,1]),');\n',sep='')
+    sParm[loopi]<-paste('  sParm[',loopi,']=1-inv_logit(',paste(Kernel.exp.dino[loopi,nclass]),');\n',sep='')
+  }
+  #############################################################
+  ##########060319update: Multiple Group ######################
+  #############################################################
+  gParm.multigroup<-array(0,dim = c(nr,1,group.num))
+  sParm.multigroup<-array(0,dim = c(nr,1,group.num))
+  for(i in 1:group.num){
+    tempfill.gParm<-gParm
+    tempfill.sParm<-sParm
+
+    tempfill.gParm<-str_replace_all(tempfill.gParm,"gParm",paste("gParm_g",i,sep=''))
+    tempfill.sParm<-str_replace_all(tempfill.sParm,"sParm",paste("sParm_g",i,sep=''))
+
+    temp.gParm<-gParm[fixedItem.vector]
+    temp.sParm<-sParm[fixedItem.vector]
+
+    for(j in 1:length(temp.gParm)){
+      temp.gParm[j]<-str_replace_all(temp.gParm[j],"\\)",paste("_g",i,")",sep=''))
+      temp.sParm[j]<-str_replace_all(temp.sParm[j],"\\)",paste("_g",i,")",sep=''))
+    }
+    for(j in 1:length(temp.gParm)){
+      temp.gParm[j]<-str_replace_all(temp.gParm[j],"\\+",paste("_g",i,")",sep=''))
+      temp.sParm[j]<-str_replace_all(temp.sParm[j],"\\+",paste("_g",i,"+",sep=''))
+    }
+
+    temp.gParm<-str_replace_all(temp.gParm,"gParm",paste("gParm_g",i,sep=''))
+    temp.sParm<-str_replace_all(temp.sParm,"sParm",paste("sParm_g",i,sep=''))
+
+    tempfill.gParm[fixedItem.vector]<-temp.gParm
+    tempfill.sParm[fixedItem.vector]<-temp.sParm
+
+    gParm.multigroup[,,i]<-tempfill.gParm
+    sParm.multigroup[,,i]<-tempfill.sParm
+
+  }
 
   #############################################################
-  ##########060719update: Multiple Group ######################
+  ##########060319update: Multiple Group ######################
   #############################################################
-
+  keep.oneMainEffect.multigroup<-NULL
   intercept.multigroup<-array(0,dim = c(nr,1,group.num))
   mainEff.multigroup<-array(0,dim = c(numMainEffect,1,group.num))
   interaction.multigroup<-array(0,dim = c(length(name.inter),1,group.num))
@@ -253,11 +300,12 @@ StanLCDM_mG.script<-function(Qmatrix,
     tempfill.intercept<-out[[5]]
     tempfill.mainEff<-itemParmName[1:numMainEffect]
     tempfill.interaction<-name.inter
-
+    tempfill.keep.oneMainEffect<-keep.oneMainEffect
 
     temp.intercept<-tempfill.intercept[fixedItem.vector]
     temp.mainEff<-tempfill.mainEff[!tempfill.mainEff%in%fixedParmName]
     temp.interaction<-tempfill.interaction[!tempfill.interaction%in%fixedParmName]
+    temp.keep.oneMainEffect<-tempfill.keep.oneMainEffect[!tempfill.keep.oneMainEffect%in%fixedParmName]
 
     for(j in 1:length(temp.intercept)){
       temp.intercept[j]<-paste(temp.intercept[j],"_g",i,sep='')
@@ -271,30 +319,45 @@ StanLCDM_mG.script<-function(Qmatrix,
       temp.interaction[j]<-paste(temp.interaction[j],"_g",i,sep='')
     }
 
+    for(j in 1:length(temp.keep.oneMainEffect)){
+      temp.keep.oneMainEffect[j]<-paste(temp.keep.oneMainEffect[j],"_g",i,sep='')
+    }
 
     tempfill.intercept[fixedItem.vector]<-temp.intercept
     tempfill.mainEff[!tempfill.mainEff%in%fixedParmName]<-temp.mainEff
     tempfill.interaction[!tempfill.interaction%in%fixedParmName]<-temp.interaction
+    tempfill.keep.oneMainEffect[!tempfill.keep.oneMainEffect%in%fixedParmName]<-temp.keep.oneMainEffect
 
     intercept.multigroup[,,i]<-tempfill.intercept
     mainEff.multigroup[,,i]<-tempfill.mainEff
     interaction.multigroup[,,i]<-tempfill.interaction
+    keep.oneMainEffect.multigroup<-c(keep.oneMainEffect.multigroup,tempfill.keep.oneMainEffect)
   }
 
-  Constrain.List<-paste('  real<lower=0>',unique(mainEff.multigroup),';\n ')
-  Unconstrain.List<-paste('  real',unique(c(intercept.multigroup,interaction.multigroup)),';\n ')
+  Constrain.List<-paste('  real<lower=0>',unique(keep.oneMainEffect.multigroup),';\n ')
+  Unconstrain.List<-paste('  real',unique(c(intercept.multigroup)),';\n ')
   #############################################################
   ##########060319update: Multiple Group End###################
   #############################################################
+
+
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
   Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
   update.Parmprior<-Parmprior
   fix.Parmprior<-NULL
-
+  for(i in 1:length(Parmprior)){
+    if(grepl(paste(fixparm.vec, collapse = "|"), Parmprior[i])){
+      update.Parmprior[i]<-""
+    }
+  }
   update.Parmprior<-update.Parmprior[update.Parmprior!='']
 
+
+  fix.Parmprior<-c(paste('  real',fixparm.vec,';\n '),
+                   paste(' ',fixparm.vec,"=0",';\n ')
+  )
   #############################################################
-  #####060719update:Change from update.Parmprior&fix     ######
+  #####060319update:Change from update.Parmprior&fix     ######
   #############################################################
   update.Parmprior.multiGroup<-NULL
   for(i in 1:length(update.Parmprior)){
@@ -351,42 +414,42 @@ StanLCDM_mG.script<-function(Qmatrix,
   #Likelihood Stan code
   if(class.equal){
     Likelihood<-paste('
-                      \n
-                      //Likelihood
-                      for (iterp in 1:Np){
-                      for (iterc in 1:Nc){
-                      for (iteri in 1:Ni){
-                      if (Y[iterp,iteri] == 1)'
+  \n
+  //Likelihood
+  for (iterp in 1:Np){
+    for (iterc in 1:Nc){
+      for (iteri in 1:Ni){
+        if (Y[iterp,iteri] == 1)'
                       ,PImat.likelihood1,'\n',
                       '        else'
                       ,PImat.likelihood0,
                       '}
-                      contributionsC[iterc]=log(Vc[iterc])+sum(contributionsI);
-                      }
-                      target+=log_sum_exp(contributionsC);
-                      }
-                      ',sep='')}else{
-                        Likelihood<-paste('
-                                          \n
-                                          //Likelihood
-                                          for (iterp in 1:Np){
-                                          for (iterc in 1:Nc){
-                                          for (iteri in 1:Ni){
-                                          if (Y[iterp,iteri] == 1)'
-                                          ,PImat.likelihood1,'\n',
-                                          '        else'
-                                          ,PImat.likelihood0,
-                                          '}\n',
-                                          Vc.likelihood
-                                          ,'
+      contributionsC[iterc]=log(Vc[iterc])+sum(contributionsI);
+    }
+  target+=log_sum_exp(contributionsC);
+  }
+  ',sep='')}else{
+    Likelihood<-paste('
+  \n
+  //Likelihood
+  for (iterp in 1:Np){
+    for (iterc in 1:Nc){
+      for (iteri in 1:Ni){
+        if (Y[iterp,iteri] == 1)'
+                      ,PImat.likelihood1,'\n',
+                      '        else'
+                      ,PImat.likelihood0,
+                      '}\n',
+                      Vc.likelihood
+                      ,'
 
 
-                                          }
-                                          target+=log_sum_exp(contributionsC);
-                                          }
-                                          ',sep='')
+  }
+  target+=log_sum_exp(contributionsC);
+ }
+                      ',sep='')
 
-                      }
+  }
   #############################################################
   #####060419update:Likelihood Add PImat_g  end################
   #############################################################
@@ -402,18 +465,18 @@ StanLCDM_mG.script<-function(Qmatrix,
   }
   '
 
-  Constrain.List<-unique(Constrain.List);Unconstrain.List<-unique(Unconstrain.List)
+
   #############################################################
   #####060419update: Stan script##############################
   #############################################################
 
   #Parameter Specification
   if(class.equal){parm.spec<-paste(c('
-                                     parameters{
-                                     simplex[Nc] Vc;\n ',paste0(Constrain.List),paste0(Unconstrain.List),
+  parameters{
+  simplex[Nc] Vc;\n ',paste0(Constrain.List),paste0(Unconstrain.List),
                                      '}\n'),collapse='')}else{
                                        parm.spec<-paste(c('
-                                                          parameters{\n ',
+  parameters{\n ',
                                                           paste(paste('   simplex[Nc] Vc_g',1:group.num, ";",sep=''),"\n"),
                                                           paste0(Constrain.List),paste0(Unconstrain.List),
                                                           '}\n'),collapse='')
@@ -423,12 +486,16 @@ StanLCDM_mG.script<-function(Qmatrix,
 
   #Reparameter Specification
   transparm.spec<-paste(c('
-                          transformed parameters{
+  transformed parameters{
 
                           ',
                           paste('  matrix[Ni, Nc] PImat_g',1:group.num,';\n',sep=''),
+                          paste('  vector[Ni] gParm_g',1:group.num,';\n',sep=''),
+                          paste('  vector[Ni] sParm_g',1:group.num,';\n',sep=''),
 
-                          paste0(c(unique(Reparm.multigroup) )),'}\n'),collapse='')
+                          c(gParm.multigroup), #060419update
+                          c(sParm.multigroup), #060419update
+                          paste0(c(Reparm.multigroup)),'}\n'),collapse='')
 
   #Model Specification update052619
   model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,update.Parmprior.multiGroup,Likelihood),sep=''),'\n}',sep=''))
@@ -447,51 +514,51 @@ StanLCDM_mG.script<-function(Qmatrix,
 
   if(class.equal){
     generatedQuantities.spec<-paste('
-                                    \n
-                                    generated quantities {
-                                    vector[Ni] log_lik[Np];
-                                    vector[Ni] contributionsI;
-                                    matrix[Ni,Nc] contributionsIC;
-                                    //Posterior
-                                    for (iterp in 1:Np){
-                                    for (iteri in 1:Ni){
-                                    for (iterc in 1:Nc){
-                                    if (Y[iterp,iteri] == 1)'
+  \n
+  generated quantities {
+  vector[Ni] log_lik[Np];
+  vector[Ni] contributionsI;
+  matrix[Ni,Nc] contributionsIC;
+  //Posterior
+  for (iterp in 1:Np){
+    for (iteri in 1:Ni){
+      for (iterc in 1:Nc){
+        if (Y[iterp,iteri] == 1)'
                                     ,PImat.likelihood1,'\n',
                                     '        else'
                                     ,PImat.likelihood0,
                                     '
-                                    contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
-                                    }
-                                    log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
-                                    }
-                                    }
-                                    }
-                                    ',sep='')}else{
-                                      generatedQuantities.spec <- paste( '
-                                                                         \n
-                                                                         generated quantities {
-                                                                         vector[Ni] log_lik[Np];
-                                                                         vector[Ni] contributionsI;
-                                                                         matrix[Ni,Nc] contributionsIC;
-                                                                         //Posterior
-                                                                         for (iterp in 1:Np){
-                                                                         for (iteri in 1:Ni){
-                                                                         for (iterc in 1:Nc){
-                                                                         if (Y[iterp,iteri] == 1)',
-                                                                         PImat.likelihood1,'\n',
-                                                                         '        else',
-                                                                         PImat.likelihood0,'\n',
-                                                                         "   ",IC.generatedquantities,'\n
-                                                                         }\n',
-                                                                         '     log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
-                                                                         }
-                                                                         }
-                                                                         }
-',
-                                                                         sep = ''
-                                      )
-                                    }
+          contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+        }
+      log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
+    }
+  }
+  }
+  ',sep='')}else{
+    generatedQuantities.spec <- paste( '
+    \n
+    generated quantities {
+    vector[Ni] log_lik[Np];
+    vector[Ni] contributionsI;
+    matrix[Ni,Nc] contributionsIC;
+    //Posterior
+    for (iterp in 1:Np){
+      for (iteri in 1:Ni){
+        for (iterc in 1:Nc){
+          if (Y[iterp,iteri] == 1)',
+                                       PImat.likelihood1,'\n',
+                                       '        else',
+                                       PImat.likelihood0,'\n',
+                                       "   ",IC.generatedquantities,'\n
+      }\n',
+                                       '     log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
+     }
+   }
+   }
+      ',
+                                       sep = ''
+    )
+  }
 
 
 

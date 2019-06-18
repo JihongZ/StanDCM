@@ -1,11 +1,9 @@
 Package: StanDCM
 Type: Package
 Title: Fitting Bayesian Diagnostic Classfication Model via RStan
-Version: 0.8.1.9000
-Author@R: c(
-    person("Zhehan", "Jiang", email = "zjiang17@@ua.edu", role = c("aut", "cre")),
-    person("Jihong", "Zhang", email = "jihong-zhang@uiowa.edu", role = c("ctb", "cre"))
-    )
+Version: 0.8.1
+Author: Zhehan, Jiang
+Author@R: person("Zhehan", "Jiang", email = "zjiang17@@ua.edu", role = c("aut", "cre"))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
