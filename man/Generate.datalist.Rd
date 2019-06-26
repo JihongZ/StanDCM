@@ -2,16 +2,16 @@
 % Please edit documentation in R/Generate.datalist.R
 \name{Generate.datalist}
 \alias{Generate.datalist}
-\title{Generate Stan code and Run the estimation for LCDM}
+\title{Generate data list}
 \usage{
-Generate.datalist(Qmatrix, response.matrix)
+Generate.datalist(Qmatrix, response.matrix, GroupID = NA)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
+\item{response.matrix}{save the .stan file to somewhere; the default path is getwd()}
 
-\item{savename}{name the .stan}
+\item{GroupID}{name the .stan}
 }
 \value{
 a. stan file saved at the specified path

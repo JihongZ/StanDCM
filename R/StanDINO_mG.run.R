@@ -14,12 +14,12 @@
 #loading needed packages
 #load("D:\\Dropbox\\Stan\\R\\Data")
 
-StanLCDM_mG.run<-function(Qmatrix,
+StanDINO_mG.run<-function(Qmatrix,
                           response.matrix,
                           GroupID,
                           fixeditem.vector=NA,
                           class.equal=T,
-                          script.path=NA,save.path=getwd(),save.name="LCDM_uninf_multiG",
+                          script.path=NA,save.path=getwd(),save.name="DINO_uninf_multiG",
                           iter=1000,warmup = 0,
                           chain.num=3,init.list='random',control.list=NA){
   group.num<-length(unique(GroupID))
@@ -33,7 +33,7 @@ StanLCDM_mG.run<-function(Qmatrix,
     Install.package(c("CDM","stringr"))
     trueParmName<-Parm.name(Qmatrix=Qmatrix)$parm.name
     Classp.exp1<-Parm.name(Qmatrix=Qmatrix)$class.expression
-    mod1<-gLCDM( data =respMatrix, q.matrix = Qmatrix , maxit=700,link = "logit",progress=F)
+    mod1<-gdina( data =respMatrix, q.matrix = Qmatrix , maxit=700,link = "logit",progress=F)
     CDMresult<-as.data.frame(coef(mod1))
     library(stringr)
     CDM.parm.name<-paste(paste(paste('l',CDMresult[,3],sep=''),'_',sep=''),str_count(CDMresult$partype.attr,"Attr"),sep='')
@@ -70,7 +70,7 @@ StanLCDM_mG.run<-function(Qmatrix,
   if(is.na(script.path)==T){
     options(warn=-1)
     #Need to update script
-    StanLCDM_mG.script(Qmatrix=Qmatrix,
+    StanDINO_mG.script(Qmatrix=Qmatrix,
                        group.num=group.num,
                        fixeditem.vector=fixeditem.vector,
                        class.equal=class.equal,

@@ -34,7 +34,7 @@
 #
 # loo::compare(loo1, loo2)
 
-StanLCDM.loofit <- function(x, pars ="log_lik", cores = 2, save_psis =TRUE) {
-  loo1 <- loo(estimatedMod, pars = pars, save_psis = save_psis, cores = cores)
+StanDCM.fit <- function(x, pars ="log_lik", cores = 2, save_psis =TRUE) {
+  loo1 <- loo(x = x, pars = pars, save_psis = save_psis, cores = cores)
   loo1
 }

@@ -2,22 +2,18 @@
 % Please edit documentation in R/Install.package.R
 \name{Install.package}
 \alias{Install.package}
-\title{Generate Stan code and Run the estimation for LCDM}
+\title{Install and load packages.}
 \usage{
 Install.package(needed_packages)
 }
 \arguments{
-\item{Qmatrix}{the Q-matrix specified for the LCDM}
-
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
-
-\item{savename}{name the .stan}
-}
-\value{
-a. stan file saved at the specified path
+\item{needed_packages}{the packages to be installed and loaded.}
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+Install and load packages.
+}
+\examples{
+Install.package("ggplot2")
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

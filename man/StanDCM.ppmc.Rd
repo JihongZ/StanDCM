@@ -32,7 +32,8 @@ misspecifiedQmatrix <- Qmatrix
 misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
 misspecifiedQmatrix[1,3] = 0
 mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
-StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = TRUE)
+StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = FALSE)
+end - start
 }
 \author{
 {Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
