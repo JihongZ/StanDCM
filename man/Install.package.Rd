@@ -10,10 +10,13 @@ Install.package(needed_packages)
 \item{needed_packages}{the packages to be installed and loaded.}
 }
 \description{
-Install and load packages.
+\code{Install.package} allows other functions to install and load packages.
 }
 \examples{
+\dontrun{
 Install.package("ggplot2")
+}
+
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/StanLCDM.run.R
 \name{StanLCDM.run}
 \alias{StanLCDM.run}
-\title{Generate Stan code and Run the estimation for LCDM}
+\title{Run Stan for estimationg LCDM}
 \usage{
 StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
   save.path = getwd(), save.name = "LCDM_uninf", iter = 1000,
@@ -12,15 +12,29 @@ StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
-\item{save.path}{save the .stan file to somewhere; the default path is getwd()}
+\item{response.matrix}{the data matrix.}
 
-\item{save.name}{name the .stan}
+\item{script.path}{name the .stan}
+
+\item{save.path}{the directory the Stan Script file save to.}
+
+\item{save.name}{the file name for Stan script}
+
+\item{iter}{number of iteration for MCMC estimation. 1000 by default.}
+
+\item{warmup}{number of iterations for warmup.}
+
+\item{chain.num}{number of MCMC chains}
+
+\item{init.list}{random by default.}
+
+\item{control.list}{constrains put on the LCDM model.}
 }
 \value{
-a. stan file saved at the specified path
+MCMC stan object.
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+The StanLCDM.run Function to automate runing Stan program to estimate LDCM.
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

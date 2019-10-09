@@ -1,18 +1,23 @@
-#' @title Generate Stan code and Run the estimation for LCDM
+#' @title Run Stan for estimationg LCDM
 #'
 #' @description
-#' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+#' The StanLCDM.run Function to automate runing Stan program to estimate LDCM.
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param save.path save the .stan file to somewhere; the default path is getwd()
-#' @param save.name name the .stan
-#' @return a. stan file saved at the specified path
+#' @param response.matrix the data matrix.
+#' @param script.path name the .stan
+#' @param save.path the directory the Stan Script file save to.
+#' @param save.name the file name for Stan script
+#' @param iter number of iteration for MCMC estimation. 1000 by default.
+#' @param warmup number of iterations for warmup.
+#' @param chain.num number of MCMC chains
+#' @param init.list random by default.
+#' @param control.list constrains put on the LCDM model.
+#' @return MCMC stan object.
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\data.RData")
 
 
 StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="LCDM_uninf",iter=1000,warmup = 0,
