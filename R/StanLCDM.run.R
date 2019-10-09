@@ -1,7 +1,7 @@
 #' @title Run Stan for estimationg LCDM
 #'
 #' @description
-#' The StanLCDM.run Function to automate runing Stan program to estimate LDCM.
+#' The StanLCDM.run function aims to automate runing Stan program to estimate LDCM.
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
 #' @param response.matrix the data matrix.
@@ -11,7 +11,8 @@
 #' @param iter number of iteration for MCMC estimation. 1000 by default.
 #' @param warmup number of iterations for warmup.
 #' @param chain.num number of MCMC chains
-#' @param init.list random by default.
+#' @param init.list random by default. It could be "cdm" or "random". If "cdm" was chosen,
+#' the starting values will be estimated using maximum-likehood based estimation.
 #' @param control.list constrains put on the LCDM model.
 #' @return MCMC stan object.
 #'
