@@ -23,7 +23,9 @@
 
 StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="LCDM_uninf",iter=1000,warmup = 0,
                        chain.num=3, init.list='random',control.list=NA){
-  rstan.detect<-tryCatch(library("rstan"),error=function(e){"rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
+  rstan.detect<-tryCatch(library("rstan"),
+                         error=function(e){
+                           "rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
     stop()
   }
@@ -33,9 +35,8 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
     Install.package(c("CDM","stringr"))
     trueParmName<-Parm.name(Qmatrix=Qmatrix)$parm.name
     Classp.exp1<-Parm.name(Qmatrix=Qmatrix)$class.expression
-    mod1<-gdina( data =response.matrix, q.matrix = Qmatrix , maxit=700,link = "logit",progress=F)
+    mod1<-gdina(data =response.matrix, q.matrix = Qmatrix, maxit=700, link = "logit", progress=F)
     CDMresult<-as.data.frame(coef(mod1))
-    library(stringr)
     CDM.parm.name<-paste(paste(paste('l',CDMresult[,3],sep=''),'_',sep=''),str_count(CDMresult$partype.attr,"Attr"),sep='')
     CDM.parm.name<-paste(CDM.parm.name,
                          unlist(lapply(strsplit(unlist(lapply(strsplit(CDMresult$partype.attr, 'Attr', fixed=FALSE),function(x){paste(x,collapse="")})),'-'),function(x){paste(x,collapse="")})),

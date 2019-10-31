@@ -26,7 +26,8 @@ StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
 
 \item{chain.num}{number of MCMC chains}
 
-\item{init.list}{random by default.}
+\item{init.list}{random by default. It could be "cdm" or "random". If "cdm" was chosen,
+the starting values will be estimated using maximum-likehood based estimation.}
 
 \item{control.list}{constrains put on the LCDM model.}
 }
@@ -34,7 +35,7 @@ StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
 MCMC stan object.
 }
 \description{
-The StanLCDM.run Function to automate runing Stan program to estimate LDCM.
+The StanLCDM.run function aims to automate runing Stan program to estimate LDCM.
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

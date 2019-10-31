@@ -2,22 +2,29 @@
 % Please edit documentation in R/Generate.datalist.R
 \name{Generate.datalist}
 \alias{Generate.datalist}
-\title{Generate data list}
+\title{Generate and prepare the data list used for this Packgae}
 \usage{
 Generate.datalist(Qmatrix, response.matrix, GroupID = NA)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
-\item{response.matrix}{save the .stan file to somewhere; the default path is getwd()}
+\item{response.matrix}{The response matrix without any missing values. Each cell represents the response of
+each item for each person.}
 
-\item{GroupID}{name the .stan}
+\item{GroupID}{default is NA. Used for multi-group LDCM.}
 }
 \value{
-a. stan file saved at the specified path
+a list including Y (response matrix), Np (number of observation) and Ni (number of iterm)
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+\code{Generate.datalist} is used to generate a list for estimation.
+}
+\examples{
+\dontrun{
+#load("D:\\\\Dropbox\\\\Stan\\\\R\\\\data.RData") ;
+Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
+}
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

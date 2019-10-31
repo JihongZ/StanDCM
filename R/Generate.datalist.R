@@ -1,22 +1,29 @@
-#' @title Generate data list
+#' @title Generate and prepare the data list used for this Packgae
 #'
 #' @description
-#' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+#' \code{Generate.datalist} is used to generate a list for estimation.
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param response.matrix save the .stan file to somewhere; the default path is getwd()
-#' @param GroupID name the .stan
-#' @return a. stan file saved at the specified path
+#' @param response.matrix The response matrix without any missing values. Each cell represents the response of
+#' each item for each person.
+#' @param GroupID default is NA. Used for multi-group LDCM.
+#' @return a list including Y (response matrix), Np (number of observation) and Ni (number of iterm)
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\data.RData") ;Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
+#' @examples
+#' \dontrun{
+#' #load("D:\\Dropbox\\Stan\\R\\data.RData") ;
+#' Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
+#' }
 
 
 
 Generate.datalist<-function(Qmatrix,response.matrix,GroupID=NA){
-  if(sum(is.na(response.matrix))!=0){print('Stop!The response dataset contains missing value(s)')}else{
+  if(sum(is.na(response.matrix))!=0){
+    stop('Stop!The response dataset contains missing value(s)')
+    }
+  else{
     if( length((unique(unlist(unique(c(response.matrix))))))>2 ){
       Generate.dataList<-list(Y=response.matrix, Na=ncol(Qmatrix),
                               Np = nrow(response.matrix),
@@ -29,5 +36,5 @@ Generate.datalist<-function(Qmatrix,response.matrix,GroupID=NA){
     }
   }
   if(!is.na(GroupID)[1]){Generate.dataList$GroupID=GroupID}
-  Generate.dataList
+  return(Generate.dataList)
 }
