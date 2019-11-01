@@ -24,7 +24,9 @@ Imports:
     plyr,
     Rlab,
     stringr,
-    tidyr
+    tidyr,
+    rstan,
+    pbapply
 Suggests: 
     testthat,
     psych

@@ -7,13 +7,14 @@
 #' @param response.matrix the response matrix used by RStan Object
 #' @param n.sim number of simulations for Posterior Predictive Model Checking
 #' @param n.burnin number of burn-ins
-#' @param plot.option logical. whether to provide a plot for ppmc
+#' @param plot.option logical. whether to provide a plot for ppmc using ggplot2
 #' @return p-values tables
 #'
 #' @author {Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
-#'
+#' @import Rlab MCMCpack tidyr dplyr pbapply
 #' @export
 #' @examples
+#' \dontrun{
 #' load("data.RData")
 #' Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
 #' dim(respMatrix)
@@ -22,29 +23,37 @@
 #' misspecifiedQmatrix[1,3] = 0
 #' mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
 #' StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = FALSE)
-#' end - start
+#'}
+#'
 
 
-StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 20, plot.option=FALSE) {
-  Install.package(c("Rlab", "MCMCpack", "tidyr", "dplyr", "pbapply"))
+StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = NULL, n.burnin = NULL, plot.option=FALSE) {
   if(plot.option == TRUE) Install.package("ggplot2")
 
-  mod1 <- stan.model
-  posterior.matrix <- as.matrix(mod1)
-  Ni <- ncol(response.matrix)
-  Np <- nrow(response.matrix)
-  PImat.name <- grep(names(mod1), pattern = "PImat", value = T)
-  Nc <-  length(PImat.name) / Ni
-  Vc.name <- grep(names(mod1), pattern = "Vc", value = T)
-  n.sim = n.sim
-  n.iter = mod1@stan_args[[1]]$iter
-
-  if (n.burnin >= n.iter) {
-    stop('Number of iteration less than number of burn-ins')
+  if (is.null(n.sim)){
+    n.sim = stan.model@stan_args[[1]]$iter
   }
 
+  if (is.null(n.burnin)){
+    n.burnin = as.integer(n.sim / 10)
+  }
+
+  if (n.burnin >= n.sim) {
+    stop('Number of simulations less than number of burn-ins')
+  }
+
+  posterior.matrix <- as.matrix(stan.model)
+  Ni <- ncol(response.matrix)
+  Np <- nrow(response.matrix)
+  PImat.name <- grep(names(stan.model), pattern = "PImat", value = T)
+  Nc <-  length(PImat.name) / Ni
+  Vc.name <- grep(names(stan.model), pattern = "Vc", value = T)
+  n.iter = stan.model@stan_args[[1]]$iter
   Vc.posterior.matrix <- posterior.matrix[(n.burnin +1): n.iter, Vc.name]
   PImat.posterior.matrix <- posterior.matrix[(n.burnin +1): n.iter, PImat.name]
+
+  message("Posterior Predictive Model Checking is running: ")
+
   # simulate response matrix based on PImat and Vc
   pseudo.sumscore.dist.matrix = NULL
   if (is.na(n.sim)) {
@@ -83,15 +92,14 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
   rep.quantile$score <- as.numeric(rownames(rep.quantile))
   response.sumscore.obs <- apply(response.matrix, 1, sum)
   observed <- data.frame(table(response.sumscore.obs))
-  colnames(observed) <- c("score", "obs")
+  colnames(observed) <- c("score", "n.obs")
   observed$score <- as.numeric(as.character(observed$score))
   # (3) combine them together
-  df <- left_join(observed, rep.quantile, by = "score")
-  df$'WithinPosterior(95%)' <- ifelse(df$obs > df$Q95 | df$obs < df$Q5, FALSE, TRUE)
-
+  ppmc.result <- left_join(observed, rep.quantile, by = "score")
+  ppmc.result$'WithinPosterior(95%)' <- ifelse(ppmc.result$n.obs > ppmc.result$Q95 | ppmc.result$n.obs < ppmc.result$Q5, FALSE, TRUE)
 
   if(plot.option == TRUE){
-    p <- ggplot(df, aes(x = score + 1, y = obs)) +
+    p <- ggplot(ppmc.result, aes(x = score + 1, y = n.obs)) +
           theme_bw() +
           labs(x = "Raw score", y = "Number of examinees", title = "The observed and replicated raw score distributions")
 
@@ -114,7 +122,8 @@ StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 2
     print(p)
   }
 
-  df
+  message("Posterior Predictive Model Checking has finished!")
+  return(ppmc.result)
 }
 
 
