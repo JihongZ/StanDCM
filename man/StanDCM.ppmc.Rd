@@ -4,8 +4,8 @@
 \alias{StanDCM.ppmc}
 \title{A function to calculate pecentage of extreme p-values for sumscore distribution}
 \usage{
-StanDCM.ppmc(stan.model, response.matrix, n.sim = 6000, n.burnin = 20,
-  plot.option = FALSE)
+StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
+  n.burnin = NULL, plot.option = FALSE)
 }
 \arguments{
 \item{stan.model}{A rStan object}
@@ -16,7 +16,7 @@ StanDCM.ppmc(stan.model, response.matrix, n.sim = 6000, n.burnin = 20,
 
 \item{n.burnin}{number of burn-ins}
 
-\item{plot.option}{logical. whether to provide a plot for ppmc}
+\item{plot.option}{logical. whether to provide a plot for ppmc using ggplot2}
 }
 \value{
 p-values tables
@@ -25,6 +25,7 @@ p-values tables
 The StanDCM.ppmc Function to automate Stan code geneartion for LCDMs with binary resposnes
 }
 \examples{
+\dontrun{
 load("data.RData")
 Qmatrix<-cbind(Qmatrix,rep(1,9)); Qmatrix[1,1]<-0
 dim(respMatrix)
@@ -33,7 +34,8 @@ misspecifiedQmatrix[1:6,] <- 1-Qmatrix[1:6,]
 misspecifiedQmatrix[1,3] = 0
 mod2 <- StanDINA.run(misspecifiedQmatrix,response.matrix = respMatrix,iter=100,init.list='cdm', chain.num = 3, warmup = 20)
 StanDCM.ppmc(stan.model = mod2, response.matrix = respMatrix, n.sim = 1000, n.burnin = 1, plot.option = FALSE)
-end - start
+}
+
 }
 \author{
 {Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
