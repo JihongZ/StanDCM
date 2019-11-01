@@ -1,19 +1,21 @@
 Package: StanDCM
 Type: Package
-Title: Fitting Bayesian Diagnostic Classfication Model via RStan
+Title: Diagnostic Classification Model via Stan
 Version: 0.8.1
-Author: Zhehan, Jiang
+Author: Zhehan, Jiang [aut, cre, cph], Jihong, Zhang [aut, ctb]
 Author@R: c(
     person("Zhehan", "Jiang", email = "zjiang17@@ua.edu", role = c("aut", "cre"), comment = "More Resources, <https://link.springer.com/article/10.3758%2Fs13428-018-1069-9>"),
     person("Jihong", "Zhang", email = "jihong-zhang@@uiowa.edu", role = c("ctb"), comment = "My website, <http://www.jihongzhang.org>"))
 Maintainer: Jihong Zhang <jihong-zhang@uiowa.edu>
 Description: More about what it does (maybe more than one line)
     A package using Hamiltonian Monte Carlo to estimate the log-linear cognitive diagnosis model via Stan
-Depends: R (>= 3.1.0)
-License: What license is it under?
+Depends: R (>= 3.5.0)
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+BugReports: https://github.com/JihongZ/StanDCM/issues
+Maintainer: Jihong Zhang <jihong-zhang@uiowa.edu>
 Imports:
     CDM,
     dplyr,
