@@ -5,7 +5,7 @@
 \title{A function to calculate pecentage of extreme p-values for sumscore distribution}
 \usage{
 StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
-  n.burnin = NULL, plot.option = FALSE)
+  n.burnin = NULL, plot.option = FALSE, type = "sumscores")
 }
 \arguments{
 \item{stan.model}{A rStan object}
@@ -17,6 +17,8 @@ StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
 \item{n.burnin}{number of burn-ins}
 
 \item{plot.option}{logical. whether to provide a plot for ppmc using ggplot2}
+
+\item{type}{The test statistics to perform PPMC. The default is "sumscores". Setting "chisq" will calculate the bivariate item Chi square.}
 }
 \value{
 p-values tables
