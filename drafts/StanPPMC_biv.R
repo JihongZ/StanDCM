@@ -1,5 +1,7 @@
 library(StanDCM)
 
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
 mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
                          response.matrix = respMatrix,
                          iter = 2000, warmup = 1000)

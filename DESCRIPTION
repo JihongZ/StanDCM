@@ -9,7 +9,7 @@ Author@R: c(
 Maintainer: Jihong Zhang <jihong-zhang@uiowa.edu>
 Description: More about what it does (maybe more than one line)
     A package using Hamiltonian Monte Carlo to estimate the log-linear cognitive diagnosis model via Stan
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

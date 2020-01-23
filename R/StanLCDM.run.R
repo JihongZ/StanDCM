@@ -100,7 +100,7 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
 
   }
 
-  file.remove(script.path)
+  #file.remove(script.path)
   estimated_model
 }
 
