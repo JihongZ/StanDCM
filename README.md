@@ -52,7 +52,7 @@ CRAN at [here](https://CRAN.R-project.org/package=GDINA)
 
 ## Usage
 
-You can ran a LCDM model:
+You can fit a LCDM model:
 
 ``` r
 mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
@@ -61,7 +61,7 @@ mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
 summary(mod.LCDM)
 ```
 
-or you can ran a DINA model by simply using:
+or you can fit a DINA model by simply using:
 
 ``` r
 mod.DINA <- StanDINA.run(Qmatrix = Qmatrix,

@@ -57,7 +57,7 @@ The parametric version of DCM R package named GDINA can be found in R CRAN at
 
 ## Usage
 
-You can ran a LCDM model:
+You can fit a LCDM model:
 
 ```{r eval=FALSE}
 mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
@@ -66,7 +66,7 @@ mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
 summary(mod.LCDM)
 ```
 
-or you can ran a DINA model by simply using:
+or you can fit a DINA model by simply using:
 
 ```{r eval=FALSE}
 mod.DINA <- StanDINA.run(Qmatrix = Qmatrix,
