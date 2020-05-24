@@ -8,7 +8,7 @@ rstan_options(auto_write = TRUE)
 ####################### Use default Qmatrix and Data ##############################
 mod.LCDM <- StanLCDM.run(Qmatrix = Qmatrix,
                          response.matrix = respMatrix,
-                         iter = 5000, warmup = 1000, chain.num = 5)
+                         iter = 5000, warmup = 1000, chain.num = 4)
 summary(summary(mod.LCDM)$summary[,"Rhat"])
 
 mod.CRUM <- StanCRUM.run(Qmatrix = Qmatrix,

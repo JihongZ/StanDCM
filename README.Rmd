@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 
 # StanDCM
 
+[![Travis build status](https://travis-ci.org/JihongZ/StanDCM.svg?branch=master)](https://travis-ci.org/JihongZ/StanDCM)
+
 ## Overview
 __StanDCM__ is a helpful tool of estimating Diagnostic Classification Models (DCM) via Stan
 

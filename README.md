@@ -1,6 +1,9 @@
 
 # StanDCM
 
+[![Travis build
+status](https://travis-ci.org/JihongZ/StanDCM.svg?branch=master)](https://travis-ci.org/JihongZ/StanDCM)
+
 ## Overview
 
 **StanDCM** is a helpful tool of estimating Diagnostic Classification
