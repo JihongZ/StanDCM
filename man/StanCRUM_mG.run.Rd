@@ -4,10 +4,21 @@
 \alias{StanCRUM_mG.run}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanCRUM_mG.run(Qmatrix, response.matrix, GroupID, fixeditem.vector = NA,
-  class.equal = T, script.path = NA, save.path = getwd(),
-  save.name = "CRUM_uninf_multiG", iter = 1000, warmup = 0,
-  chain.num = 3, init.list = "random", control.list = NA)
+StanCRUM_mG.run(
+  Qmatrix,
+  response.matrix,
+  GroupID,
+  fixeditem.vector = NA,
+  class.equal = T,
+  script.path = NA,
+  save.path = getwd(),
+  save.name = "CRUM_uninf_multiG",
+  iter = 1000,
+  warmup = 0,
+  chain.num = 3,
+  init.list = "random",
+  control.list = NA
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

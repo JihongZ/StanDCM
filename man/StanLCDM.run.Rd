@@ -4,10 +4,18 @@
 \alias{StanLCDM.run}
 \title{Run Stan for estimationg LCDM}
 \usage{
-StanLCDM.run(Qmatrix, response.matrix, script.path = NA,
-  save.path = getwd(), save.name = "LCDM_uninf", iter = 1000,
-  warmup = 0, chain.num = 3, init.list = "random",
-  control.list = NA)
+StanLCDM.run(
+  Qmatrix,
+  response.matrix,
+  script.path = NA,
+  save.path = getwd(),
+  save.name = "LCDM_uninf",
+  iter = 1000,
+  warmup = 0,
+  chain.num = 3,
+  init.list = "random",
+  control.list = NA
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

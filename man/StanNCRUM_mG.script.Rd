@@ -4,9 +4,14 @@
 \alias{StanNCRUM_mG.script}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanNCRUM_mG.script(Qmatrix, group.num, fixeditem.vector = NA,
-  class.equal = T, save.path = getwd(),
-  save.name = "NCRUM_uninf_multiG")
+StanNCRUM_mG.script(
+  Qmatrix,
+  group.num,
+  fixeditem.vector = NA,
+  class.equal = T,
+  save.path = getwd(),
+  save.name = "NCRUM_uninf_multiG"
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

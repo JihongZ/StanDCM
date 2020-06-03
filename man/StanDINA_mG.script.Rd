@@ -4,9 +4,14 @@
 \alias{StanDINA_mG.script}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanDINA_mG.script(Qmatrix, group.num, fixeditem.vector = NA,
-  class.equal = T, save.path = getwd(),
-  save.name = "DINA_uninf_multiG")
+StanDINA_mG.script(
+  Qmatrix,
+  group.num,
+  fixeditem.vector = NA,
+  class.equal = T,
+  save.path = getwd(),
+  save.name = "DINA_uninf_multiG"
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

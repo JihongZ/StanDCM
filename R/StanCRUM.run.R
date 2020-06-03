@@ -19,7 +19,7 @@
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' #----------- CRUM model-----------#
 #' mod1<-StanCRUM.run(Qmatrix, respMatrix, iter=2000, init.list='cdm', chain.num = 3)

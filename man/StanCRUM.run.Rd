@@ -4,23 +4,52 @@
 \alias{StanCRUM.run}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanCRUM.run(Qmatrix, response.matrix, script.path = NA,
-  save.path = getwd(), save.name = "CRUM_uninf", iter = 1000,
-  warmup = 0, chain.num = 3, init.list = "random",
-  control.list = NA)
+StanCRUM.run(
+  Qmatrix,
+  response.matrix,
+  script.path = NA,
+  save.path = getwd(),
+  save.name = "CRUM_uninf",
+  iter = 1000,
+  warmup = 0,
+  chain.num = 3,
+  init.list = "random",
+  control.list = NA
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
-\item{save.path}{save the .stan file to somewhere; the default path is getwd()}
+\item{response.matrix}{the response matrix}
+
+\item{script.path}{the path to save the .stan file to somewhere; the default path is getwd()}
+
+\item{save.path}{the path to save the .stan file to somewhere; the default path is getwd()}
 
 \item{save.name}{name the .stan}
+
+\item{iter}{name the .stan}
+
+\item{warmup}{number of warmup iterations}
+
+\item{chain.num}{number of MCMC chains. Default is 3.}
+
+\item{init.list}{initial variables. Default is random. Other options include cdm}
+
+\item{control.list}{the control values}
 }
 \value{
 a. stan file saved at the specified path
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+The StanCRUM.run Function to automate Stan code generation for LCDMs with binary responses
+}
+\examples{
+\dontrun{
+#----------- CRUM model-----------#
+mod1<-StanCRUM.run(Qmatrix, respMatrix, iter=2000, init.list='cdm', chain.num = 3)
+summary(mod1)
+}
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

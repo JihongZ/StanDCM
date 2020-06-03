@@ -4,10 +4,21 @@
 \alias{StanDINA_mG.run}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanDINA_mG.run(Qmatrix, response.matrix, GroupID, fixeditem.vector = NA,
-  class.equal = T, script.path = NA, save.path = getwd(),
-  save.name = "DINA_uninf_multiG", iter = 1000, warmup = 0,
-  chain.num = 3, init.list = "random", control.list = NA)
+StanDINA_mG.run(
+  Qmatrix,
+  response.matrix,
+  GroupID,
+  fixeditem.vector = NA,
+  class.equal = T,
+  script.path = NA,
+  save.path = getwd(),
+  save.name = "DINA_uninf_multiG",
+  iter = 1000,
+  warmup = 0,
+  chain.num = 3,
+  init.list = "random",
+  control.list = NA
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

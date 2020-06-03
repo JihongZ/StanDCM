@@ -1,20 +1,21 @@
 Package: StanDCM
 Type: Package
-Title: Diagnostic Classification Model via Stan
+Title: Diagnostic Classification Model using Stan
 Version: 0.8.1
 Author: Zhehan, Jiang [aut, cre, cph], Jihong, Zhang [aut, ctb]
 Author@R: c(
     person("Zhehan", "Jiang", email = "zjiang17@@ua.edu", role = c("aut", "cre"), comment = "More Resources, <https://link.springer.com/article/10.3758%2Fs13428-018-1069-9>"),
     person("Jihong", "Zhang", email = "jihong-zhang@@uiowa.edu", role = c("ctb"), comment = "My website, <http://www.jihongzhang.org>"))
 Maintainer: Jihong Zhang <jihong-zhang@uiowa.edu>
-Description: More about what it does (maybe more than one line)
-    A package using Hamiltonian Monte Carlo to estimate the log-linear cognitive diagnosis model via Stan
-Depends: R (>= 3.4.0)
+Description: A package using Hamiltonian Monte Carlo to estimate the log-linear cognitive diagnosis model via Stan
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.1.1
+LazyData: TRUE
+RoxygenNote: 7.1.0
 BugReports: https://github.com/JihongZ/StanDCM/issues
+Depends: 
+    R (>= 3.1.0),
+    Rcpp(>= 0.12.15)
 Imports:
     CDM,
     dplyr,
@@ -27,6 +28,8 @@ Imports:
     tidyr,
     rstan,
     pbapply
+LinkingTo: StanHeaders (>= 2.18.1), rstan (>= 2.19.2), BH (>= 1.69.0), Rcpp (>= 0.12.15), RcppEigen (>= 0.3.3.4.0)
 Suggests: 
-    testthat,
-    psych
+    testthat(>= 2.0.0)
+SystemRequirements: GNU make
+NeedsCompilation: yes

@@ -4,9 +4,14 @@
 \alias{StanDINO_mG.script}
 \title{Generate Stan code and Run the estimation for StanLCDM}
 \usage{
-StanDINO_mG.script(Qmatrix, group.num, fixeditem.vector = NA,
-  class.equal = T, save.path = getwd(),
-  save.name = "DINO_uninf_multiG")
+StanDINO_mG.script(
+  Qmatrix,
+  group.num,
+  fixeditem.vector = NA,
+  class.equal = T,
+  save.path = getwd(),
+  save.name = "DINO_uninf_multiG"
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

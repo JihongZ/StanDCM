@@ -4,21 +4,27 @@
 \alias{StanPrior.update}
 \title{Generate Stan code and Run the estimation for LCDM}
 \usage{
-StanPrior.update(priorUpdate.matrix, script.path, save.path = getwd(),
-  save.name = NA)
+StanPrior.update(
+  priorUpdate.matrix,
+  script.path,
+  save.path = getwd(),
+  save.name = NA
+)
 }
 \arguments{
-\item{Qmatrix}{the Q-matrix specified for the LCDM}
+\item{priorUpdate.matrix}{the Q-matrix specified for the LCDM}
 
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
+\item{script.path}{path to save the script file}
 
-\item{savename}{name the .stan}
+\item{save.path}{save the .stan file to somewhere; the default path is getwd()}
+
+\item{save.name}{name the .stan}
 }
 \value{
 a. stan file saved at the specified path
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+The StanPrior.update Function to automate update prior
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

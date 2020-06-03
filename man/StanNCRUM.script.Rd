@@ -4,8 +4,7 @@
 \alias{StanNCRUM.script}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanNCRUM.script(Qmatrix, save.path = getwd(),
-  save.name = "NCRUM_uninf")
+StanNCRUM.script(Qmatrix, save.path = getwd(), save.name = "NCRUM_uninf")
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

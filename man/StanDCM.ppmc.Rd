@@ -2,10 +2,16 @@
 % Please edit documentation in R/StanDCM.ppmc.R
 \name{StanDCM.ppmc}
 \alias{StanDCM.ppmc}
-\title{A function to calculate pecentage of extreme p-values for sumscore distribution}
+\title{A function to calculate percentage of extreme p-values for sumscore distribution}
 \usage{
-StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
-  n.burnin = NULL, plot.option = FALSE, type = "sumscores")
+StanDCM.ppmc(
+  stan.model,
+  response.matrix,
+  n.sim = NULL,
+  n.burnin = NULL,
+  plot.option = FALSE,
+  type = "sumscores"
+)
 }
 \arguments{
 \item{stan.model}{A rStan object}
@@ -14,7 +20,7 @@ StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
 
 \item{n.sim}{number of simulations for Posterior Predictive Model Checking}
 
-\item{n.burnin}{number of burn-ins}
+\item{n.burnin}{number of burn-in iterations}
 
 \item{plot.option}{logical. whether to provide a plot for ppmc using ggplot2}
 
@@ -24,7 +30,7 @@ StanDCM.ppmc(stan.model, response.matrix, n.sim = NULL,
 p-values tables
 }
 \description{
-The StanDCM.ppmc Function to automate Stan code geneartion for LCDMs with binary resposnes
+The StanDCM.ppmc Function to automate Stan code generation for LCDMs with binary responses
 }
 \examples{
 \dontrun{

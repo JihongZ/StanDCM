@@ -4,8 +4,12 @@
 \alias{StanORDM.script}
 \title{Generate Stan code and Run the estimation for ORDM}
 \usage{
-StanORDM.script(Qmatrix, scale.num, save.path = getwd(),
-  save.name = "ORDM_uninf")
+StanORDM.script(
+  Qmatrix,
+  scale.num,
+  save.path = getwd(),
+  save.name = "ORDM_uninf"
+)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}

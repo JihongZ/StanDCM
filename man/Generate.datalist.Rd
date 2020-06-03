@@ -22,7 +22,7 @@ a list including Y (response matrix), Np (number of observation) and Ni (number 
 }
 \examples{
 \dontrun{
-#load("D:\\\\Dropbox\\\\Stan\\\\R\\\\data.RData") ;
+#load("D:\\Dropbox\\Stan\\R\\data.RData") ;
 Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
 }
 }
