@@ -13,10 +13,10 @@
 #' }
 #'
 
-Install.package = function(needed_packages){
-  for (i in 1:length(needed_packages)){
-    haspackage = require(needed_packages[i], character.only = TRUE)
-    if (haspackage==FALSE){
+Install.package <- function(needed_packages) {
+  for (i in 1:length(needed_packages)) {
+    haspackage <- require(needed_packages[i], character.only = TRUE)
+    if (haspackage == FALSE) {
       install.packages(needed_packages[i])
       require(needed_packages[i], character.only = TRUE)
     }

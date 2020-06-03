@@ -1,11 +1,19 @@
 #' @title Generate Stan code and Run the estimation for ORDM
 #'
 #' @description
-#' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+#' The StanLCDM.script Function to automate Stan code generation for LCDMs with binary resposnes
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param save.path save the .stan file to somewhere; the default path is getwd()
-#' @param save.name name the .stan
+#' @param response.matrix the response matrix
+#' @param script.path the path to save the .stan file to somewhere; the default path is getwd()
+#' @param save.path the path to save the .stan file to somewhere; the default path is getwd()
+#' @param save.name name of the .stan
+#' @param iter number of iterations
+#' @param warmup number of warmup iterations
+#' @param chain.num number of MCMC chains. Default is 3.
+#' @param init.list initial variables. Default is random. Other options include cdm
+#' @param control.list constrains put on the multigroup DINO model.
+#'
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}

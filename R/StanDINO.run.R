@@ -12,14 +12,16 @@
 #' StanDINA.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="DINA_uninf",iter=1000,warmup = floor(iter/2),
 #' chain.num=3,init.list='random',control.list=NA)
 #'
-#' @param Qmatrix A required matrix
-#' @param response.matrix save the .stan file to somewhere; the default path is getwd()
-#' @param script.path save the .stan file to somewhere; the default path is getwd()
-#' @param save.name the name of saved stan file
-#' @param iter number of iteration of MCMC estimation. defalts to 1000.
-#' @param chain.num number of MCMC chain.num.
-#' @param init.list the initial values. 'random' or 'CDM'
-#' @param control.list the controlled parameters
+#' @param Qmatrix the Q-matrix specified for the LCDM
+#' @param response.matrix the response matrix
+#' @param script.path the path to save the .stan file to somewhere; the default path is getwd()
+#' @param save.path the path to save the .stan file to somewhere; the default path is getwd()
+#' @param save.name name of the .stan
+#' @param iter number of iterations
+#' @param warmup number of warmup iterations
+#' @param chain.num number of MCMC chains. Default is 3.
+#' @param init.list initial variables. Default is random. Other options include cdm
+#' @param control.list the control values
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
 #' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
