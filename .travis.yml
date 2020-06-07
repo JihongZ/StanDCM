@@ -24,7 +24,8 @@ install:
 
 script:
   - R -e "rstan::stan_version()"
-  - R -e "library(rstan);library(StanDCM);StanDINA.run(Qmatrix, respMatrix, iter=10, init.list='cdm', warmup = 20)"
+  - R -e "library(rstan);library(StanDCM);StanDINA.run(Qmatrix, respMatrix, iter=500, init.list='cdm', warmup = 100)"
+  - R -e "library(rstan);library(StanDCM);StanDINO.run(Qmatrix, respMatrix, iter=500, init.list='cdm', warmup = 100)"
 
 notifications:
   email:
