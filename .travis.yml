@@ -19,11 +19,11 @@ before_install:
 
 install:
   - R -e "install.packages('rstan')"
+  - R -e "devtools::install_github('JihongZ/StanDCM')"
 
 script:
   - R -e "rstan::stan_version()"
-  - R -e "library(rstan);library(StanDCM)"
-  - R -e "StanDINA.run(Qmatrix, respMatrix, iter=10, init.list='cdm', warmup = 20)"
+  - R -e "library(rstan);library(StanDCM);StanDINA.run(Qmatrix, respMatrix, iter=10, init.list='cdm', warmup = 20)"
 
 notifications:
   email:
