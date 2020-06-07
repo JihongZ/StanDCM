@@ -40,12 +40,12 @@ StanDINA.run(
 }
 \value{
 StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-\code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-extracting strctural parameters.
+\code{extract} for extract for extracting various components, \code{coef} for
+extracting structural parameters.
 }
 \description{
 \code{StanDINA} uses Stan program to calibrate the deterministic inputs, noisy and gate model for dichotomous responses, and its
-extension
+extension.
 
 In addition, users are allowed to specify design matrix and link function for each item, and distinct models may be used
 in a single test for different items. The attributions can be either dichomous or polytomous.

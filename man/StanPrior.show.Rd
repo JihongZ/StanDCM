@@ -7,17 +7,13 @@
 StanPrior.show(script.path)
 }
 \arguments{
-\item{Qmatrix}{the Q-matrix specified for the LCDM}
-
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
-
-\item{savename}{name the .stan}
+\item{script.path}{the path of .stan file}
 }
 \value{
 a. stan file saved at the specified path
 }
 \description{
-The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
+The StanPrior.show Function to automate Stan code geneartion for LCDMs with binary resposnes
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

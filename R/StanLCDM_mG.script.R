@@ -9,10 +9,9 @@
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#'
+#' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
+#' @import stringr
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\Data")
 
 StanLCDM_mG.script<-function(Qmatrix,
                              group.num,
@@ -21,8 +20,8 @@ StanLCDM_mG.script<-function(Qmatrix,
                              save.path=getwd(),save.name="LCDM_uninf_multiG"){
 
   #Load packages
-  Install.package("plyr")
-  Install.package('stringr')
+  # Install.package("plyr")
+  # Install.package('stringr')
 
   nc<-ncol(Qmatrix)
   nr<-nrow(Qmatrix)

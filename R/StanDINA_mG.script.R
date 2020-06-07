@@ -4,15 +4,18 @@
 #' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
 #'
 #' @param Qmatrix the Q-matrix specified for the LCDM
+#' @param group.num number of gourps
+#' @param fixeditem.vector item vector
+#' @param class.equal class is equal or not. TRUE by default.
 #' @param save.path save the .stan file to somewhere; the default path is getwd()
 #' @param save.name name the .stan
+#' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
+#' @import stringr
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\Data")
 
 StanDINA_mG.script<-function(Qmatrix,
                              group.num,
@@ -21,8 +24,8 @@ StanDINA_mG.script<-function(Qmatrix,
                              save.path=getwd(),save.name="DINA_uninf_multiG"){
 
   #Load packages
-  Install.package("plyr")
-  Install.package('stringr')
+  # Install.package("plyr")
+  # Install.package('stringr')
 
   nc<-ncol(Qmatrix)
   nr<-nrow(Qmatrix)

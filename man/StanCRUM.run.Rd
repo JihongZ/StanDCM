@@ -47,7 +47,7 @@ The StanCRUM.run Function to automate Stan code generation for LCDMs with binary
 \examples{
 \dontrun{
 #----------- CRUM model-----------#
-mod1<-StanCRUM.run(Qmatrix, respMatrix, iter=2000, init.list='cdm', chain.num = 3)
+mod1<-StanCRUM.run(Qmatrix, response.matrix, iter=2000, init.list='cdm', chain.num = 3)
 summary(mod1)
 }
 }

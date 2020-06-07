@@ -30,8 +30,6 @@ chain.num=3,init.list='random',control.list=NA)
 }
 \value{
 StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-\code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-extracting strctural parameters.
 }
 \description{
 \code{StanDINA} uses Stan program to calibrate the deterministic inputs, noisy and gate model for dichotomous responses, and its

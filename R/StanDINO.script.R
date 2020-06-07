@@ -19,8 +19,8 @@
 #' @param control.list name the .stan
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-#' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-#' extracting strctural parameters.
+#' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
+#' @import stringr
 #'
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
@@ -37,8 +37,8 @@
 StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
 
   #Load packages
-  Install.package("plyr")
-  Install.package('stringr')
+  # Install.package("plyr")
+  # Install.package('stringr')
 
   nc<-ncol(Qmatrix)
   nr<-nrow(Qmatrix)

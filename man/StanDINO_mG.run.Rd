@@ -45,7 +45,7 @@ StanDINO_mG.run(
 a. stan file saved at the specified path
 }
 \description{
-The StanLCDM.script Function to automate Stan code generation for LCDMs with binary resposnes
+The StanDINO_mG.run Function to automate Stan code generation for DINOs with binary resposnes
 }
 \author{
 {Zhehan Jiang, University of Alabama, \email{zjiang17@ua.edu}}

@@ -13,9 +13,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' #load("D:\\Dropbox\\Stan\\R\\data.RData") ;
 #' Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
 #' }
+
+
 
 
 

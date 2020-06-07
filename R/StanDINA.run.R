@@ -3,7 +3,7 @@
 #'
 #' @description
 #' \code{StanDINA} uses Stan program to calibrate the deterministic inputs, noisy and gate model for dichotomous responses, and its
-#' extension
+#' extension.
 #'
 #' In addition, users are allowed to specify design matrix and link function for each item, and distinct models may be used
 #' in a single test for different items. The attributions can be either dichomous or polytomous.
@@ -20,8 +20,8 @@
 #' @param control.list constrains put on the multigroup DINO model.
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-#' \code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-#' extracting strctural parameters.
+#' \code{extract} for extract for extracting various components, \code{coef} for
+#' extracting structural parameters.
 #'
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
@@ -39,7 +39,7 @@ StanDINA.run <- function(Qmatrix, response.matrix,
                          script.path = NA, save.path = getwd(), save.name = "DINA_uninf",
                          iter = 1000, warmup = 0,
                          chain.num = 3, init.list = "random", control.list = NA) {
-  rstan.detect <- tryCatch(library("rstan"), error = function(e) {
+  rstan.detect <- tryCatch(!sum(installed.packages() %in% "rstan"), error = function(e) {
     "rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."
   })
   if (length(rstan.detect) == 1) {
@@ -53,7 +53,7 @@ StanDINA.run <- function(Qmatrix, response.matrix,
     Classp.exp1 <- Parm.name(Qmatrix = Qmatrix)$class.expression
     mod1 <- gdina(data = respMatrix, q.matrix = Qmatrix, maxit = 700, link = "logit", progress = F)
     CDMresult <- as.data.frame(coef(mod1))
-    library(stringr)
+
     CDM.parm.name <- paste(paste(paste("l", CDMresult[, 3], sep = ""), "_", sep = ""), str_count(CDMresult$partype.attr, "Attr"), sep = "")
     CDM.parm.name <- paste(CDM.parm.name,
       unlist(lapply(strsplit(unlist(lapply(strsplit(CDMresult$partype.attr, "Attr", fixed = FALSE), function(x) {

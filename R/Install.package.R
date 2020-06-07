@@ -6,7 +6,7 @@
 #' @param needed_packages the packages to be installed and loaded.
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#'
+#' @importFrom utils install.packages
 #' @examples
 #' \dontrun{
 #' Install.package("ggplot2")

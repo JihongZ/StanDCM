@@ -13,7 +13,10 @@
 #' @return p-values tables
 #'
 #' @author {Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
-#' @import Rlab MCMCpack tidyr dplyr pbapply
+#' @importFrom  plyr arrange count desc failwith id mutate rename summarise summarize count
+#' @importFrom  rstan extract
+#' @import MCMCpack pbapply
+#' @import ggplot2
 #' @export
 #' @examples
 #' \dontrun{
@@ -32,7 +35,7 @@
 StanDCM.ppmc <- function(stan.model, response.matrix,
                          n.sim = NULL, n.burnin = NULL,
                          plot.option = FALSE, type = "sumscores") {
-  if (plot.option == TRUE) Install.package("ggplot2")
+  #if (plot.option == TRUE) Install.package("ggplot2")
 
   if (is.null(n.sim)) {
     n.sim <- stan.model@stan_args[[1]]$iter

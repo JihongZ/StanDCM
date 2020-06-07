@@ -7,17 +7,16 @@
 #' @param save.path save the .stan file to somewhere; the default path is getwd()
 #' @param save.name name the .stan
 #' @return a. stan file saved at the specified path
-#'
+#' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
+#' @import stringr
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\Data")
 
 StanLCDM.script<-function(Qmatrix,save.path=getwd(),save.name="LCDM_uninf"){
   #Load packages
-  Install.package("plyr")
-  Install.package('stringr')
+  # Install.package("plyr")
+  # Install.package('stringr')
 
   nc<-ncol(Qmatrix)
   nr<-nrow(Qmatrix)

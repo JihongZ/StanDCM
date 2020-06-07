@@ -16,6 +16,12 @@ StanDINA_mG.script(
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
 
+\item{group.num}{number of gourps}
+
+\item{fixeditem.vector}{item vector}
+
+\item{class.equal}{class is equal or not. TRUE by default.}
+
 \item{save.path}{save the .stan file to somewhere; the default path is getwd()}
 
 \item{save.name}{name the .stan}

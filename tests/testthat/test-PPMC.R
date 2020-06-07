@@ -3,12 +3,12 @@ context("Test PPMC function")
 
 
 test_that("PPMC test",{
-  mod1 <- StanDINA.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
-  mod2 <- StanDINO.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
-  mod3 <- StanLCDM.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
-  mod4 <- StanNCRUM.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
-  mod5 <- StanCRUM.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
-  mod6 <- StanORDM.run(Qmatrix,respMatrix, iter=100,init.list='cdm', warmup = 20)
+  mod1 <- StanDINA.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
+  mod2 <- StanDINO.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
+  mod3 <- StanLCDM.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
+  mod4 <- StanNCRUM.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
+  mod5 <- StanCRUM.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
+  mod6 <- StanORDM.run(Qmatrix,respMatrix, iter=10,init.list='cdm', warmup = 20)
   ppmc.mod1 <- StanDCM.ppmc(mod1, respMatrix, n.sim = 500, n.burnin = 10, plot.option = TRUE)
   ppmc.mod2 <- StanDCM.ppmc(mod2, respMatrix, n.sim = 500, n.burnin = 10, plot.option = TRUE)
   ppmc.mod3 <- StanDCM.ppmc(mod3, respMatrix, n.sim = 500, n.burnin = 10, plot.option = TRUE)

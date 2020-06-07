@@ -27,8 +27,6 @@ chain.num=3,init.list='random',control.list=NA)
 }
 \value{
 StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-\code{\link{extract}} for extract for extracting various components, \code{\link{coef}} for
-extracting strctural parameters.
 }
 \description{
 The \code{StanDINO.run} Function allows to automate Stan code geneartion for DINO model with binary resposnes

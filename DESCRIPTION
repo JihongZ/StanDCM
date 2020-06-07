@@ -14,22 +14,47 @@ LazyData: TRUE
 RoxygenNote: 7.1.0
 BugReports: https://github.com/JihongZ/StanDCM/issues
 Depends: 
-    R (>= 3.1.0),
-    Rcpp(>= 0.12.15)
+    R (>= 3.5.0)
 Imports:
     CDM,
-    dplyr,
+    plyr,
     ggplot2,
     GDINA,
     MCMCpack,
-    plyr,
     Rlab,
     stringr,
     tidyr,
     rstan,
     pbapply
-LinkingTo: StanHeaders (>= 2.18.1), rstan (>= 2.19.2), BH (>= 1.69.0), Rcpp (>= 0.12.15), RcppEigen (>= 0.3.3.4.0)
-Suggests: 
-    testthat(>= 2.0.0)
-SystemRequirements: GNU make
-NeedsCompilation: yes
+LinkingTo: StanHeaders (>= 2.18.1), rstan (>= 2.19.2)
+Collate: 
+    'Generate.datalist.R'
+    'Install.package.R'
+    'Parm.name.R'
+    'StanCRUM.run.R'
+    'StanCRUM.script.R'
+    'StanCRUM_mG.run.R'
+    'StanCRUM_mG.script.R'
+    'StanDCM.fit.R'
+    'StanDCM.ppmc.R'
+    'StanDINA.run.R'
+    'StanDINA.script.R'
+    'StanDINA_mG.run.R'
+    'StanDINA_mG.script.R'
+    'StanDINO.run.R'
+    'StanDINO.script.R'
+    'StanDINO_mG.run.R'
+    'StanDINO_mG.script.R'
+    'StanLCDM.run.R'
+    'StanLCDM.script.R'
+    'StanLCDM_mG.run.R'
+    'StanLCDM_mG.script.R'
+    'StanNCRUM.run.R'
+    'StanNCRUM.script.R'
+    'StanNCRUM_mG.run.R'
+    'StanNCRUM_mG.script.R'
+    'StanORDM.run.R'
+    'StanORDM.script.R'
+    'StanPrior.show.R'
+    'StanPrior.update.R'
+    'data.R'

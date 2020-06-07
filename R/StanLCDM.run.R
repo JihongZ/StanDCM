@@ -15,7 +15,8 @@
 #' the starting values will be estimated using maximum-likehood based estimation.
 #' @param control.list constrains put on the LCDM model.
 #' @return MCMC stan object.
-#'
+#' @import CDM
+#' @import stringr
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
@@ -23,7 +24,7 @@
 
 StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="LCDM_uninf",iter=1000,warmup = 0,
                        chain.num=3, init.list='random',control.list=NA){
-  rstan.detect<-tryCatch(library("rstan"),
+  rstan.detect<-tryCatch(!sum(installed.packages() %in% "rstan"),
                          error=function(e){
                            "rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details."})
   if(length(rstan.detect)==1){
@@ -32,7 +33,7 @@ StanLCDM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
   Cdm.init = F
   if(init.list=='cdm'){
     Cdm.init = T
-    Install.package(c("CDM","stringr"))
+    # Install.package(c("CDM","stringr"))
     trueParmName<-Parm.name(Qmatrix=Qmatrix)$parm.name
     Classp.exp1<-Parm.name(Qmatrix=Qmatrix)$class.expression
     mod1<-gdina(data =response.matrix, q.matrix = Qmatrix, maxit=700, link = "logit", progress=F)

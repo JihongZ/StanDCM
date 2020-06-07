@@ -11,8 +11,6 @@
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\Data")
 
 StanORDM.script<-function(Qmatrix,scale.num,save.path=getwd(),save.name="ORDM_uninf"){
   nc<-ncol(Qmatrix)

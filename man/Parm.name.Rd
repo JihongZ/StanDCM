@@ -8,10 +8,6 @@ Parm.name(Qmatrix)
 }
 \arguments{
 \item{Qmatrix}{the Q-matrix specified for the LCDM}
-
-\item{savepath}{save the .stan file to somewhere; the default path is getwd()}
-
-\item{savename}{name the .stan}
 }
 \value{
 a. stan file saved at the specified path

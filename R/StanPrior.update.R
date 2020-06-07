@@ -8,16 +8,16 @@
 #' @param save.path save the .stan file to somewhere; the default path is getwd()
 #' @param save.name name the .stan
 #' @return a. stan file saved at the specified path
+#' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
+#' @import stringr
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\data.RData") ;Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
 
 StanPrior.update <- function(priorUpdate.matrix, script.path, save.path = getwd(), save.name = NA) {
-  Install.package("plyr")
-  Install.package("stringr")
+  # Install.package("plyr")
+  # Install.package("stringr")
   if (is.na(save.name)) {
     saveUpdate.name <- paste(format(Sys.time(), "%a%b%Y"), "_priorUpdate.stan", sep = "")
   } else {

@@ -7,7 +7,7 @@
 #' @param savepath save the .stan file to somewhere; the default path is getwd()
 #' @param savename name the .stan
 #' @return a. stan file saved at the specified path
-#'
+#' @importFrom rstan extract
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export
