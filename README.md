@@ -3,6 +3,8 @@
 
 [![Travis build
 status](https://travis-ci.org/JihongZ/StanDCM.svg?branch=master)](https://travis-ci.org/JihongZ/StanDCM)
+[![R build
+status](https://github.com/JihongZ/StanDCM/workflows/R-CMD-check/badge.svg)](https://github.com/JihongZ/StanDCM/actions)
 
 ## Overview
 
