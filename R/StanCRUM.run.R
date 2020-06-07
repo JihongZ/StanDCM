@@ -30,7 +30,7 @@
 
 StanCRUM.run <- function(Qmatrix, response.matrix, script.path = NA, save.path = getwd(), save.name = "CRUM_uninf", iter = 1000, warmup = 0,
                          chain.num = 3, init.list = "random", control.list = NA) {
-  if(!sum(installed.packages()%in%"rstan")){
+  if (!sum(installed.packages() %in% "rstan")) {
     stop("rstan is not loaded properly. See https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started for details.")
   }
   Cdm.init <- F
@@ -111,4 +111,3 @@ StanCRUM.run <- function(Qmatrix, response.matrix, script.path = NA, save.path =
 
   estimated_model
 }
-
