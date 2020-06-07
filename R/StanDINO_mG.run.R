@@ -17,11 +17,9 @@
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#' @import CDM
+#' @import CDM rstan
 #' @import stringr
 #' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\Data")
 
 StanDINO_mG.run<-function(Qmatrix,
                           response.matrix,

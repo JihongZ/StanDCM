@@ -24,7 +24,7 @@
 #' @param control.list the control values
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-#' @import CDM
+#' @import CDM rstan
 #' @import stringr
 #'
 #'
