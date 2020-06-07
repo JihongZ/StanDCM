@@ -1,4 +1,4 @@
-library(StanDCM)
+# library(StanDCM)
 library(rstan)
 
 options(mc.cores = parallel::detectCores())
