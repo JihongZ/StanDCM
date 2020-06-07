@@ -1,5 +1,5 @@
 
-# StanDCM
+# StanDCM <a href='https://www.jihongzhang.org/rpackages/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 [![Travis build
 status](https://travis-ci.org/JihongZ/StanDCM.svg?branch=master)](https://travis-ci.org/JihongZ/StanDCM)
