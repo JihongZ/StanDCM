@@ -17,8 +17,8 @@
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#' @import CDM rstan
-#' @import stringr
+#' @importFrom rstan extract stan_model
+#' @import stringr CDM
 #' @export
 
 StanDINO_mG.run<-function(Qmatrix,

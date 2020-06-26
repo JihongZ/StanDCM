@@ -8,7 +8,7 @@
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
-#' @import stringr
+#' @import stringr CDM
 #' @export
 
 StanPrior.show<-function(script.path){

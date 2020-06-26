@@ -18,7 +18,7 @@
 #' @return a. stan file saved at the specified path
 #' @importFrom GDINA GDINA
 #' @importFrom stringr str_count
-#' @importFrom rstan extract
+#' @importFrom rstan extract stan_model stan_model
 #' @importFrom stats coef
 #' @export
 #' @examples

@@ -15,8 +15,8 @@
 #' @param control.list constrains put on the multigroup LCDM model.
 #'
 #' @return a. stan file saved at the specified path
-#' @import CDM rstan
-#' @import stringr
+#' @importFrom rstan extract stan_model
+#' @import stringr CDM
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export

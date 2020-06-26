@@ -17,8 +17,8 @@
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#' @import CDM rstan
-#' @import stringr
+#' @importFrom rstan extract stan_model
+#' @import stringr CDM
 #' @export
 
 StanNCRUM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),save.name="NCRUM_uninf",iter=1000,warmup = 0,

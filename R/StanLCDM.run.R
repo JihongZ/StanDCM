@@ -15,8 +15,8 @@
 #' the starting values will be estimated using maximum-likehood based estimation.
 #' @param control.list constrains put on the LCDM model.
 #' @return MCMC stan object.
-#' @import CDM rstan
-#' @import stringr
+#' @importFrom rstan extract stan_model
+#' @import stringr CDM
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export

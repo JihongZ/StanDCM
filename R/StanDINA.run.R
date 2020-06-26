@@ -25,7 +25,10 @@
 #'
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
-#'
+#' @importFrom GDINA GDINA
+#' @importFrom stringr str_count
+#' @importFrom rstan extract stan_model
+#' @importFrom stats coef
 #' @export
 #' @examples
 #' \dontrun{

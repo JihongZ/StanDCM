@@ -20,7 +20,7 @@
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
 #' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
-#' @import stringr
+#' @import stringr CDM
 #'
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}

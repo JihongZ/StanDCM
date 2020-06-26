@@ -10,7 +10,7 @@
 #' @param save.path save the .stan file to somewhere; the default path is getwd()
 #' @param save.name name the .stan
 #' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
-#' @import stringr
+#' @import stringr CDM
 #' @return a. stan file saved at the specified path
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}

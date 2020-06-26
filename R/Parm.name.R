@@ -6,7 +6,7 @@
 #' @param Qmatrix the Q-matrix specified for the LCDM
 #' @return a. stan file saved at the specified path
 #' @importFrom plyr failwith id summarize count desc mutate arrange rename summarise
-#' @import stringr
+#' @import stringr CDM
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
 #'
 #' @export

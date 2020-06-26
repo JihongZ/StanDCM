@@ -24,8 +24,9 @@
 #' @param control.list the control values
 #'
 #' @return StanDINA returens an object of class StanDINA. Methods for StanDINA objects include
-#' @import CDM rstan
-#' @import stringr
+#' @import CDM
+#' @import stringr CDM
+#' @importFrom rstan extract stan_model
 #'
 #'
 #' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu} \cr Jihong Zhang, University of Iowa, \email{jihong-zhang@uiowa.edu}}
